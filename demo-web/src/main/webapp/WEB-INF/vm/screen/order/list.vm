@@ -1,0 +1,94 @@
+#set($layout = "layout/empty.vm")
+<form class="form-horizontal" id="orderList">
+    <table class="table table-striped table-bordered table-condensed table-hover grid fixed">
+        <tr>
+            <td>用户pin </td>
+            <td><input type="text" id="pin" /></td>
+        </tr>
+        <tr>
+            <td>当前页码 </td>
+            <td><input type="text" id="page" value="1"/></td>
+        </tr>
+        <tr>
+            <td>每页大小 </td>
+            <td><input type="text" id="pageSize" value="50"/></td>
+        </tr>
+        <tr>
+            <td>订单类型 </td>
+            <td>
+                <select name="orderType" id="orderType">
+                    <option value="1">待付款</option>
+                    <option value="-1">已取消</option>
+                    <option value="128">待收货</option>
+                    <option value="129">确认收货</option>
+                    <option value="1024">已完成</option>
+                    <option value="4096" selected>全部订单</option>
+                </select>
+            </td>
+            </td>
+        </tr>
+        <tr>
+            <td>来源 </td>
+            <td>
+                <select name="source" id="source">
+                    <option value="1">PC</option>
+                    <option value="2">APP</option>
+                    <option value="3">H5</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>客户端类型</td>
+            <td>
+                <select name="c" id="c">
+                    <option value="apple" selected>apple</option>
+                    <option value="android">android</option>
+                    <option value="iPad">iPad</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="reset"> </td>
+            <td>
+                <button id="updateData" type="button" class="btn btn-default" onclick="getOrderList()">
+                    查询
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<br />结果为：<br/>
+<div id="result"> </div>
+<script>
+    function getOrderList(){
+        $("#result").html("正在查询，请稍候");
+
+        var pin = $("#pin").val();
+        var page = $("#page").val();
+        var pageSize = $("#pageSize").val();
+        var orderType = $("#orderType").val();
+        var source = $("#source").val();
+        var c = $("#c").val();
+        jQuery.ajax({
+            type: 'GET',
+            url: '/order_center/getOrderList' ,
+            data: {
+                "pin" : pin,
+                "page": page,
+                "pageSize": pageSize,
+                "orderType": orderType,
+                "source": source,
+                "c": c
+            } ,
+            success: function(d){
+                $("#result").html("");      //先清空页面
+                var data = JSON.stringify(d, null, 4);
+                $("<pre>").text(data).appendTo($("#result"));
+                //$("#result").html(data);
+            },
+            error:function () {
+                $("#result").html("您的输入有误，请重新输入正确信息进行查询");
+            }
+        });
+    };
+</script>

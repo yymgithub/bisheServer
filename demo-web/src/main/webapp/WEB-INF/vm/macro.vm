@@ -1,0 +1,184 @@
+#macro (pager $page $url $form)
+#** 定义局部变量pageCount保存总页数 *#
+### 总数量
+##    #set($totalNumber = $page.totalNumber)
+    #set($totalNumber = $page.items)
+##页码
+    #set($pageNo = $page.page)
+##页码总数
+    #set($pageSize = $page.itemsPerPage)
+## 总页数
+    #set ($pageCount=(($totalNumber + $pageSize - 1) / $pageSize))
+
+    #set ($startNum=(($pageNo - 1)*$pageSize)+1)
+    #if($pageNo == $pageCount)
+        #set ($endNum=$totalNumber)
+    #else
+        #set ($endNum=$pageNo * $pageSize)
+    #end
+
+
+    #if ($totalNumber>0)
+
+    #** 页号越界处理 *#
+        #if ($pageNo > $pageCount)
+            #set ($pageNo = $pageCount)
+        #end
+        #if ($pageNo < 1)
+            #set ($pageNo = 1)
+        #end
+    <div class="row">
+
+        <div class="col-sm-6">
+
+            <div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">
+                显示 $!{startNum} 到 $!{endNum} 条记录。 总计 $totalNumber 记录
+            </div>
+
+        </div>
+
+        <div class="col-sm-6 text-right">
+
+            <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+                <ul class="pagination">
+                #** 上一页处理 *#
+                    #if ($pageNo == 1)
+                        <li class="paginate_button previous disabled" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                            <a href="javascript:void(0)">&laquo;&nbsp;上一页</a>
+                        </li>
+                    #else
+                        <li class="paginate_button previous" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                            <a href="javascript:void(0)" onclick="gotoPage($pageNo - 1 ,'$url', '$form');return false;">&laquo;&nbsp;上一页</a>
+                        </li>
+                    #end
+
+                #** 如果前面页数过多,显示... *#
+                    #set ($start=1)
+                    #if ($pageNo > 4)
+                        #set ($start=($pageNo - 1))
+                        <li class="paginate_button " aria-controls="dataTables-example" tabindex="0">
+                            <a href="javascript:void(0)" onclick="gotoPage(1 ,'$url', '$form');return false;">1</a>
+                        </li>
+                        <li class="paginate_button " aria-controls="dataTables-example" tabindex="0">
+                            <a href="javascript:void(0)" onclick="gotoPage(2 ,'$url', '$form');return false;">2</a>
+                        </li>
+                        <li><span> &hellip; </span></li>
+                    #end
+                #** 显示当前页号和它附近的页号 *#
+                    #set ($end=($pageNo + 1))
+                    #if ($end > $pageCount)
+                        #set ($end = $pageCount)
+                    #end
+                    #foreach ($i in [$start..$end])
+                        #if ($pageNo == $i)
+                            <li class="paginate_button active" aria-controls="dataTables-example" tabindex="0">
+                                <a href="javascript:void(0)" onclick="gotoPage($i ,'$url' , '$form');return false;">$i</a>
+                            </li>
+                        #else
+                            <li class="paginate_button" aria-controls="dataTables-example" tabindex="0">
+                                <a href="javascript:void(0)" onclick="gotoPage($i ,'$url', '$form');return false;">$i</a>
+                            </li>
+                        #end
+                    #end
+                #** 如果后面页数过多,显示... *#
+                    #if ($end < $pageCount - 2)
+                        <li><span> &hellip; </span></li>
+                    #end
+                    #if ($end < $pageCount - 1)
+                        #set( $vPageNo = $pageCount - 1 )
+                        <li class="paginate_button" aria-controls="dataTables-example" tabindex="0">
+                            <a href="javascript:void(0)" onclick="gotoPage($vPageNo ,'$url', '$form');return false;">$vPageNo</a>
+                        </li>
+                    #end
+                    #if ($end < $pageCount)
+                        <li class="paginate_button" aria-controls="dataTables-example" tabindex="0">
+                            <a href="javascript:void(0)" onclick="gotoPage($pageCount ,'$url', '$form');return false;">$pageCount</a>
+                        </li>
+                    #end
+                #** 下一页处理 *#
+                    #if ($pageNo == $pageCount)
+                        <li class="paginate_button next disabled" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                            <a href="javascript:void(0)" >下一页&nbsp;&raquo;</a>
+                        </li>
+                    #else
+                        #set( $vPageNo = $pageNo + 1 )
+                        <li class="paginate_button next" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                            <a href="javascript:void(0)" onclick="gotoPage($vPageNo ,'$url' , '$form');return false;">下一页&nbsp;&raquo;</a>
+                        </li>
+
+                    #end
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script language="javascript">
+        function gotoPage(no,url,formId) {
+            var obName = '' ;
+            var formOb = $("#"+formId) ;
+            var list = formOb.find("input") ;
+            if(list.length > 0 ) {
+                var obName = $(list[0]);
+                var proName = obName.attr("name") ;
+                if(proName.indexOf(".") > 0) {
+                    obName = proName.substr(0, (proName.indexOf(".") + 1)) ;
+                }
+            }
+            var data = $("#"+formId).serialize()+"&"+"page="+no ;
+
+            if(formOb.attr('type') == 'modal') {
+                Toplife.modal.refreshModalPage(url , data) ;
+            }else{
+                Toplife.refreshCenterPage(url , data) ;
+            }
+        }
+    </script>
+    #end
+
+#end
+
+
+#macro(showSimpleError)
+    #if(!$!actionErrors.empty)
+        #foreach($str in $actionErrors)
+            $!str
+            #break
+        #end
+    #end
+#end
+
+#macro(showError)
+    #if(!$!actionErrors.empty)
+        #foreach($str in $actionErrors)
+        <li>$!str</li>
+        #end
+    #end
+#end
+
+#macro(showSimpleMessage)
+    #if(!$!actionMessages.empty)
+        #foreach($str in $actionErrors)
+            $!str
+            #break
+        #end
+    #end
+#end
+
+#macro(showMessage)
+    #if(!$!actionMessages.empty)
+        #foreach($str in $actionErrors)
+        <li>$!str</li>
+        #end
+    #end
+#end
+
+##渲染下拉框
+#macro(singleSelect $options $id $name $value $attributes )
+<select id="${id}" name="${name}" $!{attributes}>
+    #foreach($option in $options.keySet())
+        <option value="${option}" #if($value && $value == $option)
+                selected="selected" #end> ${options.get($option)}</option>
+    #end
+</select>
+#end

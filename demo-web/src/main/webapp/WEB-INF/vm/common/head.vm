@@ -1,0 +1,72 @@
+ #if($ischild)
+
+ #else
+ <head>
+     <title>toplife后台管理</title>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+     <link rel="shortcut icon" href="http://www.jd.com/favicon.ico" type="image/x-icon"/>
+     <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+     <META HTTP-EQUIV="expires" CONTENT="0">
+     <link  rel="stylesheet"  href="/skin/bootstrap.min.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/metisMenu.min.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/timeline.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/sb-admin-2.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/morris.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/font-awesome.min.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/bootstrap-datetimepicker.min.css" type="text/css" />
+     <link  rel="stylesheet"  href="/skin/fileinput.min.css" type="text/css" />
+
+     <style  type="text/css">
+         .error{color: red}
+     </style>
+     <script type="text/javascript">
+         window.pageConfig = {};
+     </script>
+
+     <!--[if gte IE 7]><!-->
+     <link id="artDialog-skin" href="/resources/artDialog/skins/blue.css" rel="stylesheet" />
+     <!--<![endif]-->
+     <!--[if lt IE 7]>
+     <link id="artDialog-skin" href="/resources/artDialog/skins/default.css" rel="stylesheet" />
+     <![endif]-->
+     <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
+     <script type="text/javascript" src="/js/jquery/jquery.validate.min.js"></script>
+
+     <script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
+
+     <!-- file upload -->
+
+     <!-- Bootstrap Core JavaScript -->
+     <script type="text/javascript" src="/js/bootstrap/bootstrap.min.js"></script>
+
+
+
+     <script type="text/javascript" src="/js/bootstrap/upload/fileinput.min.js"></script>
+
+     <!-- Metis Menu Plugin JavaScript -->
+     <script type="text/javascript" src="/js/bootstrap/metisMenu.min.js"></script>
+
+     <!-- Morris Charts JavaScript -->
+     <script type="text/javascript" src="/js/bootstrap/raphael-min.js"></script>
+     <!-- Custom Theme JavaScript -->
+     <script type="text/javascript" src="/js/bootstrap/sb-admin-2.js"></script>
+
+     <script type="text/javascript" src="/js/bootstrap/date/bootstrap-datetimepicker.min.js"></script>
+     <script type="text/javascript" src="/js/bootstrap/date/bootstrap-datetimepicker.zh-CN.js"></script>
+
+     <script type="text/javascript" src="/resources/js/validate-message-cn.js"></script>
+     <script type="text/javascript" src="resources/datepicker/WdatePicker.js"></script>
+     <script type="text/javascript" src="/js/artDialog/artDialog.min.js" ></script>
+     <script type="text/javascript" src="/js/artDialog/artDialog.plugins.min.js"></script>
+
+     <style>
+         TABLE.grid thead{background-color: #efefef;background-image: -webkit-gradient(linear, 0 0%, 0 100%, from(#fdfdfd), to(#eaeaea));background-image: -webkit-linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);background-image: -moz-linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);background-image: -ms-linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);background-image: -o-linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);background-image: -linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);}
+         TABLE.grid thead th{font-size: 14px;padding: 5px 10px 2px;text-align: center;vertical-align:middle;color: #666666;}
+         TABLE.grid2 thead{background: #e5e5e9;background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e5e5e9), color-stop(1, #fbfbfc));background: -ms-linear-gradient(bottom, #e5e5e9, #fbfbfc);background: -moz-linear-gradient(center bottom, #e5e5e9 0%, #fbfbfc 100%);background: -o-linear-gradient(bottom, #e5e5e9, #fbfbfc);filter: progid:dximagetransform.microsoft.gradient(startColorStr='#dddde2', EndColorStr='#f9f9f9');-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#fbfbfc',EndColorStr='#e5e5e9')";border-right: 1px solid #c4c4cd;color: #707083;text-shadow: 1px 1px 0px #ffffff;font-size: 1em;-webkit-box-shadow: inset 1px 0px 0px #f6f6f7;-moz-box-shadow: inset 1px 0px 0px #f6f6f7;box-shadow: inset 1px 0px 0px #f6f6f7;vertical-align: middle;font-weight: normal;}
+         TABLE.grid2 thead th{text-align: center;}
+         table.table thead .sorting,table.table thead .sorting_asc,table.table thead .sorting_desc{cursor: pointer;padding-right: 15px;}
+         TABLE{word-break: break-all ; word-wrap: break-all;font-size: 14px;}
+     </style>
+ </head>
+ #end

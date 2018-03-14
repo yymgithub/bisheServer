@@ -1,0 +1,45 @@
+#set($layout = "layout/empty.vm")
+<div id="main" class="panel-body">
+    <div class="brlum"><a href="#">定时任务管理 &gt; </a>创建定时任务</div>
+    <form action="" method="post" class="definewidth m20" id="newForm" >
+        <input type="hidden" value="$!workerManage.id" name="id" />
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <td width="10%" class="tableleft"><span style="color:#FF0000;">*</span>任务名称</td>
+                <td>
+                    <input type="text" value="$!{workerManage.workerName}" style="width: 200px" name="workerName" class="required" maxlength="100"/><span style="color: green">配置在任务执行类中的英文名称</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%" class="tableleft"><span style="color:#FF0000;">*</span>任务描述</td>
+                <td>
+                    <input type="text" value="$!{workerManage.workerDesc}" style="width: 200px" name="workerDesc" class="required" maxlength="100"/><span style="color: green">定时任务的中文描述</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%" class="tableleft"><span style="color:#FF0000;">*</span>允许运行IP</td>
+                <td>
+                    <textarea class="required" name="allowIp" rows="3" cols="25">$!{workerManage.allowIp}</textarea> <span style="color: green">多个IP英文逗号隔开</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tableleft"></td>
+                <td>
+                    <button type="button" onclick="save()" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <script>
+
+        $(function () {
+            $('#backid').click(function () {
+                Toplife.refreshCenterPage('/workerManage/list');
+            });
+        });
+        function save(){
+            Toplife.refreshCenterPage('workerManage/updateValNameAndSortNum', jQuery('#newForm').serialize());
+        }
+    </script>

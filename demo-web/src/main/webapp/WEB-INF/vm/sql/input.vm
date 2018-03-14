@@ -1,0 +1,150 @@
+#set($layout='layout/default.vm')
+<h3>色球</h3>
+<br/>
+<hr/>
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">SQL</label>
+
+        <div class="controls">
+            <textarea id="content" placeholder="输入SQL内容" style="width: 800px;height: 200px;"></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Password</label>
+
+        <div class="controls">
+            <input type="password" id="pwd" placeholder="Password">
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+
+            <input type="button" class="btn" id="commit" value="确定"><br><br>
+            <input type="button" class="btn" id="redis_read" value="读redis"><br><br>
+            <input type="button" class="btn" id="redis_del" value="删redis"><br><br>
+        </div>
+    </div>
+</form>
+
+<div class="span12">
+    <div id="logConsole" style="width: 800px; height: 300px;overflow: auto;background-color: #ffc794"></div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#commit").click(function () {
+            var content = $.trim($("#content").val());
+            var pwd = $.trim($("#pwd").val());
+            if (content == "" || pwd == "") {
+                alert("语句和密码都不能为空！");
+                return false;
+            }
+            var contentArray = content.split(";");
+            if (confirm(contentArray.length + "条语句，\r\n " + contentArray.join("\r\n") + " ,确定？")) {
+                for (var i = 0; i < contentArray.length; i++) {
+                    var contentItem = contentArray[i];
+                    if (!!$.trim(contentItem)) {
+                        var data = {content: $.trim(contentItem), pwd: pwd};
+                        executeSqlReq(data);
+                    }
+                }
+            }
+        });
+
+
+        $("#redis_del").click(function () {
+            var content = $.trim($("#content").val());
+            var pwd = $.trim($("#pwd").val());
+            if (content == "" || pwd == "") {
+                alert("语句和密码都不能为空！");
+                return false;
+            }
+            if (confirm("删除redis,key=" + $.trim(content) + "，确定？")) {
+                if (!!$.trim(content)) {
+                    var data = {key: $.trim(content), pwd: pwd};
+                    delRedis(data);
+                }
+            }
+        });
+
+        $("#redis_read").click(function () {
+            var content = $.trim($("#content").val());
+            var pwd = $.trim($("#pwd").val());
+            if (content == "" || pwd == "") {
+                alert("语句和密码都不能为空！");
+                return false;
+            }
+            if (confirm("读取redis,确定？")) {
+                if (!!$.trim(content)) {
+                    var data = {key: $.trim(content), pwd: pwd};
+                    readRedis(data);
+                }
+            }
+        });
+
+    });
+
+
+    function executeSqlReq(_data) {
+        $.ajax({
+            url: "/sql/exe",
+            type: "post",
+            async: false,
+            data: _data,
+            success: function (_response) {
+                console.log(_response);
+                if (!!_response.msg) {
+                    log(_data.content + " : " + _response.msg);
+                    return false;
+                }
+
+                log(_data.content + _response.data);
+            }
+        })
+
+    }
+
+    function readRedis(_data) {
+        $.ajax({
+            url: "/sql/readRedis",
+            type: "post",
+            async: false,
+            data: _data,
+            success: function (_response) {
+                console.log(_response);
+                if (!!_response.msg) {
+                    log(_data.content + " : " + _response.msg);
+                    return false;
+                }
+                log(_data.key + _response.data);
+            }
+        })
+    }
+
+    function delRedis(_data) {
+        $.ajax({
+            url: "/sql/delRedis",
+            type: "post",
+            async: false,
+            data: _data,
+            success: function (_response) {
+                console.log(_response);
+                if (!!_response.msg) {
+                    log(_data.content + " : " + _response.msg);
+                    return false;
+                }
+                log(_data.key + _response.data);
+            }
+        })
+    }
+
+
+    var logConsole = $("#logConsole");
+    function log(_text) {
+        logConsole.append("<div>" + _text + "</div>");
+    }
+
+
+</script>

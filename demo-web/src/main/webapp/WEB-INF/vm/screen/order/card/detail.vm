@@ -1,0 +1,117 @@
+#set($layout = "layout/empty.vm")
+
+
+<form class="form-horizontal" id="orderDetail">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="text-align: center; font-size: 20px">
+            TOPLIFE贺卡信息查询
+        </div>
+        <div class="panel-body">
+            <div class="row well">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="orderId">订单ID:</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" id="orderId" type="text" name="orderId"    />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <button id="queryUserVip" type="button" class="btn btn-default" onclick="getOrderDetail()">
+                        <span  class="fa fa-search"></span> 搜索
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<br/>结果为：<br/>
+<div id="result"></div>
+
+
+<table class="table table-striped table-bordered table-condensed table-hover grid fixed">
+    <thead>
+    <tr>
+        <th width="10%">订单号</th>
+        <th width="10%">下单时间</th>
+        <th width="10%">贺卡数量</th>
+        <th width="70%">贺卡信息</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="oid"></td>
+            <td id="createTime"></td>
+            <td id="cardCount"></td>
+            <td id="cardInfo"></td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+
+    function getOrderDetail() {
+        $("#result").html("正在查询，请稍候");
+
+        var orderId = $("#orderId").val();
+//        var source = $("#source").val();
+//        var c = $("#c").val();
+        jQuery.ajax({
+            type: 'GET',
+            url: '/order_center/getOrderDetail',
+            data: {
+                "orderId": orderId//,
+//                "source" : source,
+//                "c" : c
+            },
+            dateType: 'json',
+            success: function (d) {
+                debugger
+                $("#result").html("");      //先清空页面
+                var data = d["data"];
+                if(data) {
+                    var presentInfo = data["presentInfo"];
+                    if (presentInfo) {
+                        var cardData = presentInfo["presentCard"];
+                        if (cardData) {
+                            jQuery('#oid').html($("#orderId").val());//订单号
+                            jQuery('#cardCount').html(cardData["count"]);
+                            jQuery('#createTime').html(data["dateSubmit"]);
+                            var content = cardData["contents"];
+                            var contentArray = "";
+                            for (var i = 0; i < content.length; i++) {
+                                contentArray += "<b>贺卡" + (i+1)+"</b>";
+                                contentArray += "</br>";
+                                contentArray += "收件人:";
+                                contentArray += content[i]["to"];
+                                contentArray += "</br>";
+
+                                contentArray += "内容:";
+                                contentArray += content[i]["content"];
+                                contentArray += "</br>";
+
+                                contentArray += "寄件人:";
+                                contentArray += content[i]["from"];
+                                contentArray += "</br>";
+                                contentArray += "</br>";
+                            }
+//                    var contentArray = JSON.stringify(content, null, 4);
+                            jQuery('#cardInfo').html(contentArray);
+                        }
+                    } else {
+                        $("#result").html("此订单号无礼品卡信息");
+                    }
+
+                }
+//                $("<pre>").text(data).appendTo($("#result"));
+                //jQuery('#centerContainer').html(d);
+            },
+            error:function () {
+                $("#result").html("您的输入有误，请重新输入正确信息进行查询");
+            }
+
+        });
+    };
+
+
+</script>

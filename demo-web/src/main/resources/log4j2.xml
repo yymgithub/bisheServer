@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %F(%L) [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<File name="root" fileName="G:\demo\root.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+		<!--<File name="ORDER_MQ_FILE" fileName="/export/Logs/toplife-api.jd.local/order_mq_file.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+		<File name="jsf-log" fileName="/export/Logs/toplife-api.jd.local/jsf-log.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>-->
+	</Appenders>
+
+
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="root" />
+		</Root>
+
+		<logger name="order_mq" level="INFO" additivity="true">
+			<AppenderRef ref="ORDER_MQ_FILE" />
+		</logger>
+
+		<logger name="com.jd.toplife.api.dao.mapper" level="TRACE" additivity="true">
+		</logger>
+		<logger name="org.apache.ibatis" level="TRACE" additivity="true">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="root" />
+		</logger>
+		<logger name="java.sql" level="TRACE" additivity="true">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="root" />
+		</logger>
+		<logger name="com.jd.toplife.api.util.log.JsfInvokingLogFilter" level="info" additivity="false">
+			<AppenderRef ref="jsf-log" />
+		</logger>
+	</Loggers>
+
+</Configuration>

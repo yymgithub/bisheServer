@@ -1,0 +1,166 @@
+#set($layout = "layout/empty.vm")
+
+<style>
+    .kv-avatar .file-preview-frame,.kv-avatar .file-preview-frame:hover {
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        text-align: center;
+    }
+    .kv-avatar .file-input {
+        display: table-cell;
+        max-width: 220px;
+    }
+</style>
+
+<div id="kv-avatar-errors" class="center-block" style="width:800px;display:none"></div>
+<form  class="text-center" action="" method="post" enctype="multipart/form-data">
+    <!-- 商品图片 start -->
+    <div class="kv-avatar center-block" style="width:200px">
+        <input id="file_upload" name="file" type="file" class="file-loading">
+    </div>
+    <!-- 商品图片 end -->
+
+</form>
+
+<form action="/vender/addVender.action" id="venderForm" method="post">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>商家id</label>
+                    <input id="venderId" name="venderId" type="text">
+                </div>
+
+                <div class="form-group">
+                    <label>商家key</label>
+                    <input id="venderKey" name="venderKey">
+                </div>
+
+                <div class="form-group">
+                    <label>商家域名</label>
+                    <input id ="venderDomain" name="venderDomain" >
+                </div>
+
+                <div class="form-group">
+                    <label>客服编码</label>
+                    <input id="chatCode" name="chatCode">
+                </div>
+
+                <div class="form-group">
+                    <label>商家图片</label>
+                    <input id="imagePath" name="imagePath">
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>商家名称</label>
+                    <input id="venderName" name="venderName">
+                </div>
+
+                <div class="form-group">
+                    <label>商家密钥</label>
+                    <input id="secretKey" name="secretKey">
+                </div>
+
+                <div class="form-group">
+                    <label>商家客服电话</label>
+                    <input id="phone" name="phone">
+                </div>
+
+                <div class="form-group">
+                    <label>前台key</label>
+                    <input id="frontKey" name="frontKey">
+                </div>
+
+                <div class="form-group">
+                    <label>服务时间</label>
+                    <input id="serviceTime" name="serviceTime">
+                </div>
+            </div>
+
+            <div class="col-lg-6" align="center">
+                <button class="btn btn-primary" type="button" onclick="saveVender()">保存</button>
+                <button class="btn btn-primary" type="button" onclick="gotoList()">返回</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript" >
+
+    var v = jQuery("#venderForm").validate({
+        rules:{
+            "vender.venderId":{required:true,digits:true},
+            "vender.venderKey":{required:true},
+            "vender.venderDomain":{required:true},
+            "vender.chatCode":{required:true},
+            "vender.venderName":{required:true},
+            "vender.secretKey":{required:true},
+            "vender.phone":{required:true},
+            "vender.frontKey":{required:true}
+        },messages:{
+            "vender.venderId":{required:"商家id不能为空",digits:"请输入正确整数"},
+//            "vender.venderKey":{required:"商家Key不能为空"},
+//            "vender.venderDomain":{required:"商家域名不能为空"},
+            "vender.chatCode":{required:"客服编码不能为空"},
+            "vender.venderName":{required:"商家名称不能为空"},
+//            "vender.secretKey":{required:"商家密钥不能为空"},
+            "vender.phone":{required:"商家电话不能为空"},
+//            "vender.frontKey":{required:"商家前台key不能为空"}
+        }
+    });
+
+    /***
+     * 保存商家信息
+     */
+    function saveVender(){
+        if(jQuery("#venderForm").valid()){
+            jQuery.ajax({
+                type: 'POST',
+                url: '/vender/addVender.action' ,
+                data: jQuery('#venderForm').serialize() ,
+                success: function(d){
+                    jQuery('#centerContainer').html(d);
+                }
+            });
+        } ;
+    };
+
+    /***
+     * 返回列表
+     */
+    function gotoList() {
+        Toplife.refreshCenterPage('/vender/list.action',{})
+    }
+
+
+    $("#file_upload").fileinput({
+        uploadUrl :"/fileupload.action" ,
+        overwriteInitial: true,
+        maxFileSize: 1500,
+        showClose: false,
+        showCaption: false,
+        showUploadedThumbs : false,
+        browseLabel: '',
+        removeLabel: '',
+        browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>',
+        elErrorContainer: '#kv-avatar-errors',
+        msgErrorClass: '商品图片错误',
+        defaultPreviewContent: '<img src="http://static.360buyimg.com/devfe/huishou/1.0.0/css/i/blank.jpg" alt="回收商品图片" style="width:160px;height: 160px">',
+        layoutTemplates: {main2: '{preview} {upload} {browse}' ,footer :''},
+        allowedFileExtensions: ["jpg", "png", "gif"]
+    });
+
+
+    //图片完成的回调函数
+    $('#file_upload').on('fileuploaded', function(event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.extra,
+                response = data.response, reader = data.reader;
+        $("#imagePath").val(response.result) ;
+    });
+
+</script>

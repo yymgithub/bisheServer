@@ -1,0 +1,71 @@
+#set($layout = "layout/empty.vm")
+<form class="form-horizontal" id="orderTrack">
+    <table class="table table-striped table-bordered table-condensed table-hover grid fixed">
+        <tr>
+            <td>订单ID</td>
+            <td><input type="text" id="orderId"/></td>
+        </tr>
+        <tr>
+            <td>来源</td>
+            <td>
+                <select name="source" id="source">
+                    <option value="1">PC</option>
+                    <option value="2" selected>APP</option>
+                    <option value="3">H5</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>客户端类型</td>
+            <td>
+                <select name="c" id="c">
+                    <option value="apple" selected>apple</option>
+                    <option value="android">android</option>
+                    <option value="iPad">iPad</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="reset"></td>
+            <td>
+                <button id="updateData" type="button" class="btn btn-default" onclick="getCancelOrderDetail()">
+                    查询
+                </button>
+            </td>
+        </tr>
+    </table>
+
+
+</form>
+<br/>结果为：<br/>
+<div id="result"></div>
+
+<script>
+    function getCancelOrderDetail() {
+        $("#result").html("正在查询，请稍候");
+
+        var orderId = $("#orderId").val();
+        var source = $("#source").val();
+        var c = $("#c").val();
+        jQuery.ajax({
+            type: 'GET',
+            url: '/order_center/getCancelOrderDetail',
+            data: {
+                "orderId": orderId,
+                "source" : source,
+                "c" : c
+            },
+            dateType: 'json',
+            success: function (d) {
+                $("#result").html("");      //先清空页面
+                var data = JSON.stringify(d, null, 4);
+                $("<pre>").text(data).appendTo($("#result"));
+                //jQuery('#centerContainer').html(d);
+            },
+            error:function () {
+                $("#result").html("您的输入有误，请重新输入正确信息进行查询");
+            }
+
+        });
+    };
+</script>

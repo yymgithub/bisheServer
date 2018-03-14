@@ -1,0 +1,60 @@
+#set($layout = "layout/empty.vm")
+<div id="main" class="panel-body">
+    <div class="brlum"><a href="javascript:toHome()">版本管理 &gt; </a>更新版本号</div>
+    <br>
+    <br>
+    <form action="versionManege/add" method="post" class="definewidth m20" id="addVersionForm" >
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>android最低支持版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="androidLowV" class="required" maxlength="100" value=$!{version.androidLowV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.androidLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>android最新版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="androidNewV" class="required" maxlength="100" value=$!{version.androidNewV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.androidNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>ipad最低支持版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="ipadLowV" class="required" maxlength="100" value=$!{version.ipadLowV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.ipadLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>ipad最新版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="ipadNewV" class="required" maxlength="100" value=$!{version.ipadNewV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.ipadNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>iphone最低支持版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="iphoneLowV" class="required" maxlength="100" value=$!{version.iphoneLowV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.iphoneLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;">*</span>iphone最新版本</td>
+                <td>
+                    <input type="text" style="width: 200px" name="iphoneNewV" class="required" maxlength="100" value=$!{version.iphoneNewV} /><span style="color: green">&nbsp;&nbsp;当前版本$!{version.iphoneNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">描述</td>
+                <td>
+                    <textarea class="required" name="description" rows="3" cols="25"></textarea> <span style="color: green">&nbsp;&nbsp;版本升级内容</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tableleft"></td>
+                <td>
+                    <button type="button" onclick="checkVersion()" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/screen/version/versionManage-add.js"></script>

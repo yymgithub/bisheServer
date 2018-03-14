@@ -1,0 +1,21 @@
+#set($layout = "layout/empty.vm")
+<form class="form-horizontal" id="workerForm">
+    <button id="updateData" type="button" class="btn btn-default" onclick="updateDate()">
+        用户成长值洗数据
+    </button>
+    <div id="result"> </div>
+</form>
+<script>
+    function updateDate(){
+            jQuery.ajax({
+                type: 'POST',
+                url: '/base/rule/updateGrowthData.action' ,
+                data: jQuery('#workerForm').serialize() ,
+                success: function(d){
+                    $("#result").html(d);
+                    debugger
+                    jQuery('#centerContainer').html(d);
+                }
+            });
+    };
+</script>
