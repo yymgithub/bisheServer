@@ -10,6 +10,8 @@ import java.sql.Date;
 @Data
 public class User {
 
+    //id
+    private Integer id;
     //电话号码
     private String phoneId;
     //用户名称
@@ -27,4 +29,10 @@ public class User {
     //修改时间
     private Date modified;
 
+    public User(String phoneId, String userName, Integer userRole, String password) {
+        this.phoneId = phoneId;
+        this.userName = userName;
+        this.userRole = userRole;
+        this.password = password;
+    }
 }

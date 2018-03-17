@@ -3,9 +3,38 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="com.liang.demo.dao.UserMapper">
-    <select id="getAll" resultType="com.liang.demo.domain.User">
-        SELECT * from user
-    </select>
+
+
+    <!--<resultMap id="userResultMap" type="com.liang.demo.domain.User">
+        <id property="id" column="id"/>
+        <result property="phoneId" column="phone_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userRole" column="user_role"/>
+        <result property="password" column="password"/>
+        <result property="userState" column="user_state"/>
+        <result property="yn" column="yn"/>
+        <result property="created" column="created"/>
+        <result property="modified" column="modified"/>
+    </resultMap>-->
+
+    <insert id="createdUser" parameterType="com.liang.demo.domain.User">
+        INSERT user (phone_id,user_name,user_role,password,user_state,yn,created,modified)
+        VALUES (
+        <if test="phoneId != null">
+            #{phoneId},
+        </if>
+        #{userName},
+        <if test="userRole != null">
+            #{userRole},
+        </if>
+        <if test="password != null">
+            #{password},
+        </if>
+        0,1,now(),now()
+        )
+    </insert>
+
 </mapper>
 

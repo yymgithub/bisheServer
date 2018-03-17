@@ -8,6 +8,11 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
-    List<User> getAll();
+    /**
+     * 管理员创建用户
+     * @param user
+     * @return
+     */
+    Integer createdUser(User user);
 
 }

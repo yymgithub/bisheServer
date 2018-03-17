@@ -25,14 +25,9 @@ public class TestController {
 
     @RequestMapping(value = "/test")
     @ResponseBody
-    public List<User> test(){
+    public String test(){
         logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        List<User> users = null;
-        try {
-            users = userService.getAll();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return users;
+
+        return "/vm/screen/index.vm";
     }
 }
