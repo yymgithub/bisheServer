@@ -6,14 +6,15 @@ import com.liang.demo.service.UserService;
 import com.liang.demo.util.BaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.JsonUtils;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -53,5 +54,22 @@ public class UserController {
             result.setMessage("创建用户的Controller层出现异常");
         }
         return result;
+    }
+
+
+    @RequestMapping(value = "/userLogin")
+    @ResponseBody
+    public String userLogin(HttpServletRequest request, Model model, @ModelAttribute("user")User user){
+
+        System.out.println(user.toString());
+        return "screen/index";
+    }
+
+    @RequestMapping(value = "/login")
+    @ResponseBody
+    public ModelAndView login(HttpServletRequest request, Model model){
+        ModelAndView view = new ModelAndView();
+        view.setViewName("index");
+        return view;
     }
 }
