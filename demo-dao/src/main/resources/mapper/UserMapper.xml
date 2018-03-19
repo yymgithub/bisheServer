@@ -7,17 +7,17 @@
 <mapper namespace="com.liang.demo.dao.UserMapper">
 
 
-    <!--<resultMap id="userResultMap" type="com.liang.demo.domain.User">
-        <id property="id" column="id"/>
-        <result property="phoneId" column="phone_id"/>
-        <result property="userName" column="user_name"/>
-        <result property="userRole" column="user_role"/>
-        <result property="password" column="password"/>
-        <result property="userState" column="user_state"/>
-        <result property="yn" column="yn"/>
-        <result property="created" column="created"/>
-        <result property="modified" column="modified"/>
-    </resultMap>-->
+    <resultMap id="userResultMap" type="com.liang.demo.domain.User" autoMapping="false">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="phoneId" column="phone_id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="userRole" column="user_role" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="password" column="password"  javaType="String" jdbcType="VARCHAR"/>
+        <result property="userState" column="user_state" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
 
     <insert id="createdUser" parameterType="com.liang.demo.domain.User">
         INSERT user (phone_id,user_name,user_role,password,user_state,yn,created,modified)
@@ -35,6 +35,25 @@
         0,1,now(),now()
         )
     </insert>
-
+    <select id="selectUserByPhonePw" parameterType="com.liang.demo.domain.User"
+            resultMap="userResultMap">
+        SELECT * FROM USER WHERE
+        <if test="phoneId!= null">
+            phone_id=#{phoneId}
+        </if>
+        <if test="password!= null ">
+          AND password=#{password}
+        </if>
+    </select>
+    <update id="updateUserstate">
+        update USER
+        <set>
+            user_state=#{userState}
+        </set>
+        WHERE
+        <if test="phoneId!= null">
+            phone_id=#{phoneId}
+        </if>
+    </update>
 </mapper>
 

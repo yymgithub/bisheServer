@@ -2,7 +2,7 @@ package com.liang.demo.domain;
 
 import lombok.Data;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by 永远有多远 on 2018/3/13.
@@ -25,9 +25,9 @@ public class User {
     //是否有效
     private Integer yn;
     //创建时间
-    private Date created;
+    private Timestamp created;
     //修改时间
-    private Date modified;
+    private Timestamp modified;
 
     public User(String phoneId, String userName, Integer userRole, String password) {
         this.phoneId = phoneId;
@@ -35,4 +35,7 @@ public class User {
         this.userRole = userRole;
         this.password = password;
     }
+    public User(){
+
+    };
 }

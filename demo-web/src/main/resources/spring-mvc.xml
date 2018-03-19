@@ -19,7 +19,7 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
+    <mvc:default-servlet-handler/>
     <!-- 配置输出为json格式的数据 -->
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">

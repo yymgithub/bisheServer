@@ -1,10 +1,9 @@
- #if($ischild)
-
- #else
+## #if($ischild)
+##
+## #else
  <head>
-     <title>toplife后台管理</title>
+     <title>PS台架后台管理</title>
      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-     <link rel="shortcut icon" href="http://www.jd.com/favicon.ico" type="image/x-icon"/>
      <META HTTP-EQUIV="pragma" CONTENT="no-cache">
      <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
      <META HTTP-EQUIV="expires" CONTENT="0">
@@ -69,4 +68,4 @@
          TABLE{word-break: break-all ; word-wrap: break-all;font-size: 14px;}
      </style>
  </head>
- #end
+## #end

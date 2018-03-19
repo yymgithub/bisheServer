@@ -40,4 +40,34 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
+
+    /**
+     * 判断输入密码和账号在数据库中是否有相应数据
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public User userLogin(User user) {
+        if (user == null) return null;
+        try {
+            User us = userMapper.selectUserByPhonePw(user);
+            if (us == null) return null;
+            else return us;
+        } catch (Error e) {
+            logger.error("用户登陆service层异常", e);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean updateUserState(User user) {
+        if(user==null) return false;
+        try{
+            if(userMapper.updateUserstate(user)==1) return true;
+        }catch (Error e){
+            logger.error("用户登陆service层修改用户状态异常", e);
+        }
+        return false;
+    }
 }

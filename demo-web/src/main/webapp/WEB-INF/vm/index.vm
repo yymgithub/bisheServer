@@ -1,5 +1,10 @@
-<div id="wrapper">
+<!DOCTYPE HTML>
+<html>
+#parse("common/head.vm")
 
+<body>
+
+<div id="wrapper">
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -9,7 +14,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">toplife后台管理</a>
+            <a class="navbar-brand" href="index.html">PS台架后台管理</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -17,13 +22,13 @@
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" href="javascript:;">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa">$!{userInfo}</i>
+                    <i class="fa fa-user fa-fw"></i> <i class="fa">$!{user.phoneId}</i>
                 </a>
 
                 <!-- /.dropdown-user -->
             </li>
             <li class="dropdown">
-                <a class="dropdown-toggle" href="/logout.action">
+                <a class="dropdown-toggle" href="/user/logout">
                     <i class="fa fa-sign-out fa-fw"></i> <i class="fa">退出</i>
                 </a>
 
@@ -42,28 +47,21 @@
                             <a href="javascript:void(0);" link="$!{menu.menuLink}"><i
                                     class="fa fa-dashboard fa-fw"></i> $!{menu.menuName}#if($!{menu.menuVoList.size()} > 0)
                                 <span class="fa arrow"></span>#end</a>
+                        #if($!{menu.menuVoList.size()} > 0)
+                            <ul class="nav nav-second-level">
+                                #foreach($menuChild in ${menu.menuVoList})
+                                    <li>
+                                        <a href="javascript:void(0);"
+                                           link="$!{menuChild.menuLink}">$!{menuChild.menuName}#if($!{menuChild.menuVoList.size()} > 0)
+                                            <span class="fa arrow"></span>#end</a>
 
-                            #if($!{menu.menuVoList.size()} > 0)
-                                <ul class="nav nav-second-level">
-                                    #foreach($menuChild in ${menu.menuVoList})
-                                        <li>
-                                            <a href="javascript:void(0);"
-                                               link="$!{menuChild.menuLink}">$!{menuChild.menuName}#if($!{menuChild.menuVoList.size()} > 0)
-                                                <span class="fa arrow"></span>#end</a>
-                                            <ul class="nav nav-third-level">
-                                                #foreach($menuChildthird in ${menuChild.menuVoList})
-                                                    <li>
-                                                        <a href="javascript:void(0);"
-                                                           link="$!{menuChildthird.menuLink}">$!{menuChildthird.menuName}</a>
-                                                    </li>
-                                                #end
-                                            </ul>
-                                        </li>
-                                    #end
-                                </ul>
-                            #end
-                        </li>
+                                    </li>
+                                #end
+                            </ul>
+                        #end
                     #end
+                </li>
+                ##                    #end
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
@@ -71,7 +69,7 @@
         <!-- /.navbar-static-side -->
     </nav>
 
-    <div id="page-wrapper">
+    <div id="page-wrapper"">
         <!-- 中间容器 -->
         <div class="panel panel-default">
             <div id="centerContainer" class="panel-body">
@@ -130,7 +128,7 @@
                         <div id="modalContainer" class="modal-body">
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                    <span class="sr-only">60% Complete</span>
+                                    <span class="sr-only">70% Complete</span>
                                 </div>
                             </div>
                         </div>
@@ -145,10 +143,15 @@
     <!-- /#page-wrapper -->
 </div>
 
+</body>
+</html>
+
+
+
 
 <script type="text/javascript" src="../../js/common.js"></script>
-<script type="text/javascript" src="../../js/Toplife.Common.Component.cascadeSelector-0.2.js"/>
-<script type="text/javascript" src="../../js/Toplife.plugins.js"></script>
+##<script type="text/javascript" src="../../js/Toplife.Common.Component.cascadeSelector-0.2.js"/>
+##<script type="text/javascript" src="../../js/Toplife.plugins.js"></script>
 
 <script type="text/javascript" src="../../js/bootstrap/index.js"></script>
 <script type="text/javascript" src="../../js/common/app_util.js"></script>
@@ -163,3 +166,5 @@
         $("#tipsIframe").attr("src", "/tips/tipsIndex");
     });
 </script>
+
+

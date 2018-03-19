@@ -1,3 +1,12 @@
+<link  rel="stylesheet"  href="/skin/bootstrap.min.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/metisMenu.min.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/timeline.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/sb-admin-2.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/morris.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/font-awesome.min.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/bootstrap-datetimepicker.min.css" type="text/css" />
+<link  rel="stylesheet"  href="/skin/fileinput.min.css" type="text/css" />
+
 <div id="wrapper">
 
     <!-- Navigation -->

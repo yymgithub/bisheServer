@@ -12,4 +12,19 @@ public interface UserService {
      * @return
      */
     Integer createdUser(User user);
+
+    /**
+     * 判断输入密码和账号在数据库中是否有相应数据
+     * @param user
+     * @return
+     */
+    User userLogin(User user);
+
+    /**
+     * 账户密码登录后更新账户状态
+     * @param user
+     * @return
+     */
+    boolean updateUserState(User user);
+
 }
