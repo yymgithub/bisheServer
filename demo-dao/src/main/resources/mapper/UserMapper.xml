@@ -55,5 +55,9 @@
             phone_id=#{phoneId}
         </if>
     </update>
+    <select id="getALLUser" parameterType="com.liang.demo.domain.User"
+            resultMap="userResultMap">
+            SELECT * FROM USER
+    </select>
 </mapper>
 

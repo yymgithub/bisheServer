@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,5 +70,23 @@ public class UserServiceImpl implements UserService {
             logger.error("用户登陆service层修改用户状态异常", e);
         }
         return false;
+    }
+
+    /**
+     * 获得数据库中所有用户数据
+     *
+     * @return
+     */
+    @Override
+    public List<User> getAllUser() {
+        List<User> userList=new ArrayList<>();
+        try{
+            userList=userMapper.getALLUser();
+
+        }catch (Error e){
+            logger.error("查看用户service层异常", e);
+        }
+        return userList;
+
     }
 }

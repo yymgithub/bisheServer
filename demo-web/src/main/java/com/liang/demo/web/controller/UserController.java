@@ -1,12 +1,14 @@
 package com.liang.demo.web.controller;
 
 import com.liang.demo.domain.Menu;
+import com.liang.demo.domain.Pager;
 import com.liang.demo.domain.Result;
 import com.liang.demo.domain.User;
 import com.liang.demo.service.UserService;
 import com.liang.demo.util.BaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.struts.chain.contexts.ServletActionContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +74,8 @@ public class UserController {
     @RequestMapping(value = "/login")
     @ResponseBody
     public ModelAndView login(@ModelAttribute("user") User user) {
+//        HttpSession session= ServletActionContext.SESSION_SCOPE
+
         ModelAndView view = new ModelAndView();
         User us = userService.userLogin(user);
         if (us == null || us.getUserRole() != 3) {
@@ -85,7 +90,7 @@ public class UserController {
 //        }
 
         view.addObject("user", us);
-
+//          httpSession.setAttribute("user",us);
         //界面显示Menu初始化代码
         List<Menu> menuVoList = new ArrayList<>();
         //创建用户Menu
@@ -183,8 +188,9 @@ public class UserController {
 
         menuVoList.add(userMenu);
         menuVoList.add(psMenu);
-        view.addObject("menuVoList", menuVoList);
 
+        view.addObject("menuVoList", menuVoList);
+//        httpSession.setAttribute("menuVoList",menuVoList);
         view.setViewName("index");
         return view;
     }
@@ -204,8 +210,15 @@ public class UserController {
     @RequestMapping(value = "/showUser")
     @ResponseBody
     public ModelAndView showUser() {
-
         ModelAndView view = new ModelAndView();
+        List<User> userList=new ArrayList<>();
+        userList=userService.getAllUser();
+        Pager pager = new Pager();
+        pager.setNow(1);
+        pager.setNum(2);
+        pager.setList(userList);
+        //view.addObject("userList",userList);
+        view.addObject("pager",pager);
         view.setViewName("showUser");
         return view;
     }

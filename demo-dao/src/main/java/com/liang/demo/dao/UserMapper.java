@@ -30,4 +30,6 @@ public interface UserMapper {
      */
     Integer updateUserstate(User user);
 
+    List<User> getALLUser();
+
 }

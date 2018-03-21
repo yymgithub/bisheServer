@@ -1,0 +1,69 @@
+#set($layout = "layout/empty.vm")
+<div class="panel panel-default">
+    <div class="panel-heading" style="text-align: center; font-size: 20px">
+        修改账户信息
+    </div>
+    </div>
+    <br>
+    <br>
+    <form action="versionManege/add" method="post" class="definewidth m20" id="addVersionForm" >
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <td width="50%" class="tableleft" style="text-align: right">用户账号</td>
+                <td style="text-align: left">
+                    <input type="text" readonly="readonly" style="width: 200px" name="androidLowV" class="required" maxlength="100" value=$!{version.androidLowV} /><span style="color: green">&nbsp;&nbsp;注册账号$!{version.androidLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">用户姓名</td>
+                <td>
+                    <input type="text" style="width: 200px" name="androidNewV" class="required" maxlength="100" value=$!{version.androidNewV} /><span style="color: green">&nbsp;&nbsp;手机对应联系人$!{version.androidNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft"><span style="color:#FF0000;"></span>账号角色</td>
+                <td>
+                    <input type="text" style="width: 200px" name="ipadLowV" class="required" maxlength="100" value=$!{version.ipadLowV} /><span style="color: green">&nbsp;&nbsp;角色包含管理员 普通用户和操作员$!{version.ipadLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">账号密码</td>
+                <td>
+                    <input type="text" style="width: 200px" name="ipadNewV" class="required" maxlength="100" value=$!{version.ipadNewV} /><span style="color: green">&nbsp;&nbsp;密码$!{version.ipadNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">账号状态</td>
+                <td>
+                    <input type="text"  readonly="readonly" style="width: 200px" name="iphoneLowV" class="required" maxlength="100" value=$!{version.iphoneLowV} /><span style="color: green">&nbsp;&nbsp;状态$!{version.iphoneLowV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">账号是否有效</td>
+                <td>
+                    <input type="text" style="width: 200px" name="iphoneNewV" class="required" maxlength="100" value=$!{version.iphoneNewV} /><span style="color: green">&nbsp;&nbsp;1代表有效$!{version.iphoneNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">账号创建日期</td>
+                <td>
+                    <input type="text"  readonly="readonly" style="width: 200px" name="iphoneNewV" class="required" maxlength="100" value=$!{version.iphoneNewV} /><span style="color: green">&nbsp;&nbsp;账号创建日期$!{version.iphoneNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" class="tableleft">账号修改日期日期</td>
+                <td>
+                    <input type="text"  readonly="readonly" style="width: 200px" name="iphoneNewV" class="required" maxlength="100" value=$!{version.iphoneNewV} /><span style="color: green">&nbsp;&nbsp;账号更新日期$!{version.iphoneNewV}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tableleft"></td>
+                <td>
+                    <button type="button" onclick="checkVersion()" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">取消</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/screen/version/versionManage-add.js"></script>

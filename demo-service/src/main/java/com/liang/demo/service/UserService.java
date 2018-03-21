@@ -27,4 +27,10 @@ public interface UserService {
      */
     boolean updateUserState(User user);
 
+    /**
+     * 获得数据库中所有用户数据
+     * @return
+     */
+    List<User> getAllUser();
+
 }
