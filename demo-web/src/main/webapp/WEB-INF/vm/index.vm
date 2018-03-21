@@ -150,9 +150,6 @@
 
 
 <script type="text/javascript" src="../../js/common.js"></script>
-##<script type="text/javascript" src="../../js/Toplife.Common.Component.cascadeSelector-0.2.js"/>
-##<script type="text/javascript" src="../../js/Toplife.plugins.js"></script>
-
 <script type="text/javascript" src="../../js/bootstrap/index.js"></script>
 <script type="text/javascript" src="../../js/common/app_util.js"></script>
 <script type="text/javascript" src="../../js/common/app_common.js"></script>

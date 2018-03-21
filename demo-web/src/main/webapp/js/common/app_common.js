@@ -15,11 +15,11 @@ $(document).ready(function(){
 				var cbfr = cbf();
 				if(!cbfr)return;
 			}
-            Toplife.refreshCenterPage(url , $(form).serialize());
+            Pssystem.refreshCenterPage(url , $(form).serialize());
 		}else if(toggle == 'center-redirect-without-params'){
-            Toplife.refreshCenterPage(url , {});
+            Pssystem.refreshCenterPage(url , {});
 		}else if(toggle == 'ui-add'){
-            Toplife.refreshCenterPage(url , {});
+            Pssystem.refreshCenterPage(url , {});
 		}else if(toggle == 'ui-modify'){
 			app_util.center_redirect_withid(url);
 		}else if(toggle == 'delete'){
@@ -32,7 +32,7 @@ $(document).ready(function(){
 	                    url: url ,
 	                    data: {'id' : id} ,
 	                    success: function(d){
-                            Toplife.refreshCenterPage(callbackurl);
+                            Pssystem.refreshCenterPage(callbackurl);
 	                    }
 	                });
 	            }
@@ -48,7 +48,7 @@ $(document).ready(function(){
                     url: url ,
                     data: {'id' : id} ,
                     success: function(d){
-                        Toplife.refreshCenterPage(callbackurl);
+                        Pssystem.refreshCenterPage(callbackurl);
                     }
                 });
 			}else{

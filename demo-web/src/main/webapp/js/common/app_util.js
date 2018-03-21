@@ -10,7 +10,7 @@ app_util={
         	}else{
         		allParams = {"id":id};
         	}
-            Toplife.refreshCenterPage(url,allParams) ;
+            Pssystem.refreshCenterPage(url,allParams) ;
         }else{
         	alert('请选择记录!');
         }

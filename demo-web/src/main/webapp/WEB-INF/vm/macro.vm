@@ -128,9 +128,9 @@
             var data = $("#"+formId).serialize()+"&"+"page="+no ;
 
             if(formOb.attr('type') == 'modal') {
-                Toplife.modal.refreshModalPage(url , data) ;
+                Pssystem.modal.refreshModalPage(url , data) ;
             }else{
-                Toplife.refreshCenterPage(url , data) ;
+                Pssystem.refreshCenterPage(url , data) ;
             }
         }
     </script>

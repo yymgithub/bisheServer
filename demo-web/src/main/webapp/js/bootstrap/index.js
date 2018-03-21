@@ -9,7 +9,7 @@ $(document).ready(function() {
         var url = ob.attr('link') ;
 
         if(url && url!="#"){
-            Toplife.refreshCenterPage(url , {}) ;
+            Pssystem.refreshCenterPage(url , {}) ;
         }
 
     })

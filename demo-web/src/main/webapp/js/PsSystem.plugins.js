@@ -1,5 +1,5 @@
 //创建地区的公共组件
-Toplife.namespace("Common.Component") ;
+PsSystem.namespace("Common.Component") ;
 
 /*****
  * 地址信息
@@ -7,18 +7,18 @@ Toplife.namespace("Common.Component") ;
  * @constructor
  */
 
-$.extend(Toplife.Common.Component ,{
+$.extend(PsSystem.Common.Component ,{
     setJsonpData : function (data) {
-        Toplife.Common.Component.JsonpData = data ;
+        PsSystem.Common.Component.JsonpData = data ;
     },
     getJsonpData: function () {
-        return Toplife.Common.Component.JsonpData ;
+        return PsSystem.Common.Component.JsonpData ;
     },
     setCurrentAreaSelId : function (selId) {
-        Toplife.Common.Component.selId = selId ;
+        PsSystem.Common.Component.selId = selId ;
     },
     getCurrentAreaSelId : function () {
-        return Toplife.Common.Component.selId ;
+        return PsSystem.Common.Component.selId ;
     }
 })
 
@@ -30,9 +30,9 @@ $.extend(Toplife.Common.Component ,{
  * @returns {{getArea: getArea}}
  * @constructor
  */
-Toplife.Common.Component.Area =  function(ob){
+PsSystem.Common.Component.Area =  function(ob){
 
-    var dd = new Toplife.Common.Component.Area.createAreaComponent(ob.domId) ;
+    var dd = new PsSystem.Common.Component.Area.createAreaComponent(ob.domId) ;
 
 
     function getArea (domId) {
@@ -66,11 +66,11 @@ Toplife.Common.Component.Area =  function(ob){
  * 根据divId 创建
  * @param domId
  */
-Toplife.Common.Component.Area.createAreaComponent = function(domId) {
+PsSystem.Common.Component.Area.createAreaComponent = function(domId) {
 
     //如果domId 存在
     if(domId) {
-        var area1Id = "Toplife-Area-"+domId+"-1",area2Id = "Toplife-Area-"+domId+"-2",area3Id = "Toplife-Area-"+domId+"-3",area4Id = "Toplife-Area-"+domId+"-4";
+        var area1Id = "PsSystem-Area-"+domId+"-1",area2Id = "PsSystem-Area-"+domId+"-2",area3Id = "PsSystem-Area-"+domId+"-3",area4Id = "PsSystem-Area-"+domId+"-4";
         //
         var domOb = $("#"+domId) ;
 
@@ -110,7 +110,7 @@ Toplife.Common.Component.Area.createAreaComponent = function(domId) {
  * 事件
  * @type {{}}
  */
-Toplife.Common.Component.Area.createAreaComponent.prototype.Event ={
+PsSystem.Common.Component.Area.createAreaComponent.prototype.Event ={
     childAreaEvent : function(a) {
         var areaOb = a.data.areaOb ;
         var selectOb = $(this)
@@ -118,17 +118,17 @@ Toplife.Common.Component.Area.createAreaComponent.prototype.Event ={
         if(selectOb.data("level") <=3 ) {
             var ob = areaOb.Data.getDataByFid( selectOb) ;
 
-            Toplife.Common.Component.setCurrentAreaSelId(selectOb.attr("id")) ; //设置id
+            PsSystem.Common.Component.setCurrentAreaSelId(selectOb.attr("id")) ; //设置id
 
             selectOb.bind("jsonpCallback" , function(){
                 areaOb.Dom.createOption(selectOb.next().attr("id") ,
-                    Toplife.Common.Component.getJsonpData());
+                    PsSystem.Common.Component.getJsonpData());
             })
         }
     }
 }
 
-Toplife.Common.Component.Area.createAreaComponent.prototype.Dom ={
+PsSystem.Common.Component.Area.createAreaComponent.prototype.Dom ={
     /***
      * 创建下拉框
      * @param  选择下拉框的id
@@ -170,7 +170,7 @@ Toplife.Common.Component.Area.createAreaComponent.prototype.Dom ={
  * 数据
  * @type {{}}
  */
-Toplife.Common.Component.Area.createAreaComponent.prototype.Data = {
+PsSystem.Common.Component.Area.createAreaComponent.prototype.Data = {
 
     //省市死数据
     province : [{id:1,name:"北京"},{id:2,name:"上海"},{id:3,name:"天津"},{id:4,name:"重庆"},{id:5,name:"河北"},{id:6,name:"山西"},{id:7,name:"河南"},{id:8,name:"辽宁"},{id:9,name:"吉林"},{id:10,name:"黑龙江"},{id:11,name:"内蒙古"},{id:12,name:"江苏"},{id:13,name:"山东"},{id:14,name:"安徽"},{id:15,name:"浙江"},{id:16,name:"福建"},{id:17,name:"湖北"},{id:18,name:"湖南"},{id:19,name:"广东"},{id:20,name:"广西"},{id:21,name:"江西"},{id:22,name:"四川"},{id:23,name:"海南"},{id:24,name:"贵州"},{id:25,name:"云南"},{id:26,name:"西藏"},{id:27,name:"陕西"},{id:28,name:"甘肃"},{id:29,name:"青海"},{id:30,name:"宁夏"},{id:31,name:"新疆"},{id:32,name:"台湾"},{id:42,name:"香港"},{id:43,name:"澳门"}],
@@ -183,7 +183,7 @@ Toplife.Common.Component.Area.createAreaComponent.prototype.Data = {
         $.ajax({
             url: "http://d.jd.com/area/get?fid="+selOb.val(),
             dataType: 'jsonp',
-            jsonpCallback: "Toplife.Common.Component.JsonpCallBack",
+            jsonpCallback: "PsSystem.Common.Component.JsonpCallBack",
             cache: false ,
             success : function() {
                 debugger
@@ -198,8 +198,8 @@ Toplife.Common.Component.Area.createAreaComponent.prototype.Data = {
  * @param result
  * @constructor
  */
-Toplife.Common.Component.JsonpCallBack  = function(result) {
-    Toplife.Common.Component.setJsonpData(result) ;
-    $("#"+Toplife.Common.Component.getCurrentAreaSelId()).trigger("jsonpCallback") ;
+PsSystem.Common.Component.JsonpCallBack  = function(result) {
+    PsSystem.Common.Component.setJsonpData(result) ;
+    $("#"+PsSystem.Common.Component.getCurrentAreaSelId()).trigger("jsonpCallback") ;
 
 }

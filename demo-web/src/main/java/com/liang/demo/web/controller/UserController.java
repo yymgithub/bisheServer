@@ -1,24 +1,20 @@
 package com.liang.demo.web.controller;
 
 import com.liang.demo.domain.Menu;
-import com.liang.demo.domain.Pager;
+import com.liang.demo.domain.Page;
 import com.liang.demo.domain.Result;
 import com.liang.demo.domain.User;
 import com.liang.demo.service.UserService;
 import com.liang.demo.util.BaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.struts.chain.contexts.ServletActionContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +98,7 @@ public class UserController {
         userMenuOne.setMenuLink("/user/showUser");
         userMenuOne.setMenuName("查看用户");
         Menu userMenuTwo = new Menu();
-        userMenuTwo.setMenuLink("");
+        userMenuTwo.setMenuLink("/user/addUser");
         userMenuTwo.setMenuName("增加用户");
         List<Menu> list = new ArrayList<>();
         list.add(userMenuOne);
@@ -191,7 +187,7 @@ public class UserController {
 
         view.addObject("menuVoList", menuVoList);
 //        httpSession.setAttribute("menuVoList",menuVoList);
-        view.setViewName("index");
+        view.setViewName("/index");
         return view;
     }
 
@@ -209,17 +205,44 @@ public class UserController {
 
     @RequestMapping(value = "/showUser")
     @ResponseBody
-    public ModelAndView showUser() {
+    public ModelAndView showUser(@ModelAttribute("page") Page page) {
         ModelAndView view = new ModelAndView();
-        List<User> userList=new ArrayList<>();
-        userList=userService.getAllUser();
-        Pager pager = new Pager();
-        pager.setNow(1);
-        pager.setNum(2);
-        pager.setList(userList);
+        List<User> userList = new ArrayList<>();
+        userList = userService.getAllUser();
+        Page pageP = new Page();
+        //pageP.setDatas(userList);
+        //设置每页多少条
+        pageP.setItemsPerPage(1);
+        pageP.setItems(userList.size());
+        if (page.getPage() == null) {
+            page.setPage(1);
+        }
+        pageP.setPage(page.getPage());
+        List<User> perList = new ArrayList<>();
+        int num = 0;
+        int a = pageP.getItemsPerPage() * pageP.getPage();
+        int b = a - pageP.getItemsPerPage() + 1;
+        for (User user : userList) {
+            num++;
+            if (num >= b && num <= a) {
+                perList.add(user);
+            }
+        }
+        pageP.setDatas(perList);
+
         //view.addObject("userList",userList);
-        view.addObject("pager",pager);
-        view.setViewName("showUser");
+        view.addObject("page", pageP);
+        view.setViewName("/showUser");
         return view;
     }
+
+    @RequestMapping(value="/addUser")
+    @ResponseBody
+    public ModelAndView addUser(){
+        ModelAndView view = new ModelAndView();
+        view.setViewName("/jspyy/addUser");
+        return view;
+    }
+
+
 }

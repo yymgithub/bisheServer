@@ -1,0 +1,61 @@
+#set($layout = "layout/empty.vm")
+<div id="main" class="panel-body">
+    <div class="brlum"><a href="javascript:toHome()">版本管理 &gt; </a>查看历史版本</div>
+    <br>
+    <br>
+    <form class="form-horizontal" id="versionForm">
+        <table class="table table-striped table-bordered table-condensed table-hover grid fixed">
+            <thead>
+            <tr>
+                <th class="status" width="1%"></th>
+                <th width="3%">id</th>
+                <th width="6%">android最低支持版本</th>
+                <th width="6%">android最新版本</th>
+                <th width="6%">ipad最低支持版本</th>
+                <th width="6%">ipad最新版本</th>
+                <th width="6%">iphone最低支持版本</th>
+                <th width="6%">iphone最新版本</th>
+                <th width="10%">描述信息</th>
+                <th width="5%">操作人</th>
+                <th width="3%">状态</th>
+                <th width="7%">创建时间</th>
+                <th width="7%">修改时间</th>
+            </tr>
+            </thead>
+            <tbody>
+                #foreach($version in ${versionList.datas})
+                <tr>
+                    <td class="status"></td>
+                    <td>$!{version.id}</td>
+                    <td>$!{version.androidLowV}</td>
+                    <td>$!{version.androidNewV}</td>
+                    <td>$!{version.ipadLowV}</td>
+                    <td>$!{version.ipadNewV}</td>
+                    <td>$!{version.iphoneLowV}</td>
+                    <td>$!{version.iphoneNewV}</td>
+                    <td>$!{version.description}</td>
+                    <td>$!{version.operator}</td>
+                    <td>#if($!{version.yn} == "1")
+                        <span style="color: green">有效</span>
+                    #else
+                        <span style="color: red">无效</span>
+                    #end</td>
+                    <td>$!dateTool.format("yyyy-MM-dd HH:mm:ss",$version.created)</td>
+                    <td>$!dateTool.format("yyyy-MM-dd HH:mm:ss",$version.modified)</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+        #pager(${versionList.paginator} "/versionManage/historyVersion" "versionForm")
+    </form>
+</div>
+
+<script>
+
+    function toHome(){
+        var url = '/versionManage/getVersion?;
+        Toplife.refreshCenterPage(url);
+    }
+
+</script>
+

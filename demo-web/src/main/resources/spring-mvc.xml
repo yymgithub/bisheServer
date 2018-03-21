@@ -36,12 +36,21 @@
         <property name="configLocation" value="classpath:velocity.properties"/>
         <!-- velocity模板路径 -->
         <property name="resourceLoaderPath" value="/WEB-INF/vm"/>
+        <property name="velocityProperties">
+            <props>
+                <prop key="directive.foreach.counter.name">loopCounter</prop>
+                <prop key="directive.foreach.counter.initial.value">0</prop>
+                <prop key="input.encoding">UTF-8</prop><!-- 指定模板引擎进行模板处理的编码 -->
+                <prop key="output.encoding">UTF-8</prop><!-- 指定输出流的编码 -->
+            </props>
+        </property>
     </bean>
 
     <!-- velocity视图解析器 -->
     <bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
         <property name="suffix" value=".vm"/>
         <property name="contentType"><value>text/html;charset=UTF-8</value></property>
+        <property name="exposeSpringMacroHelpers" value="true" /><!--是否使用spring对宏定义的支持-->
     </bean>
 
 

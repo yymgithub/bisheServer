@@ -1,9 +1,9 @@
-Toplife = {
+Pssystem = {
     /****
-     * toplife系统创建命名空间的方法,
+     * 系统创建命名空间的方法,
      * @param str  传入的对象, 以 .分割,
-     * 例如  创建toplife管理后台优惠券对象  Toplife.namespace("Man.Coupon")
-     * @returns {Toplife}
+     * 例如  创建系统管理后台优惠券对象  ps.namespace("Man.Coupon")
+     * @returns {Pssystem}
      */
     namespace : function(str) {
         var parts = str.split("."),object = this,i=0,l=0;
@@ -29,7 +29,7 @@ Toplife = {
 
 }
 
-Toplife.refreshCenterPage  = function(url ,data) {
+Pssystem.refreshCenterPage  = function(url ,data) {
     $.ajax({
         type: 'POST',
         url: url ,
@@ -53,7 +53,7 @@ Toplife.refreshCenterPage  = function(url ,data) {
  * ob.close :
  *
  */
-Toplife.modal = function(ob) {
+Pssystem.modal = function(ob) {
     var objectId = ob.id ;
     var modalId ="modalPanelTemplet"+"-"+objectId ;
     var modalOb = $("#" + modalId) ;
@@ -116,11 +116,11 @@ Toplife.modal = function(ob) {
 /***
  * 模态窗口关闭的方法
  */
-Toplife.modal.closeModal = function () {
+Pssystem.modal.closeModal = function () {
     $('#modalPanelTemplet').modal('hide');
 
 }
-Toplife.modal.refreshModalPage = function(url ,data) {
+Pssystem.modal.refreshModalPage = function(url ,data) {
     //var currentPanel = $("#page-wrapper").find
     $.ajax({
         type: 'POST',
@@ -133,7 +133,7 @@ Toplife.modal.refreshModalPage = function(url ,data) {
     });
 };
 
-Toplife.modal.progress = {
+Pssystem.modal.progress = {
     show:function(){
         $('#modalPanelTempletProgress').modal({
                 backdrop: 'static',

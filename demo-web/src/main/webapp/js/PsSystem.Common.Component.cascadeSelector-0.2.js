@@ -1,5 +1,5 @@
-Toplife.namespace("Common.Component") ;
-Toplife.Common.Component.cascadeSelector ={
+PsSystem.namespace("Common.Component") ;
+PsSystem.Common.Component.cascadeSelector ={
 	init : function(options){
 		this.data.initData(options);
 		this.data.__proto__ = this;
