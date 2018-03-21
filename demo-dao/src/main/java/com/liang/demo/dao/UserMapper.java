@@ -21,7 +21,7 @@ public interface UserMapper {
      * @param user 用户名 密码
      * @return user
      */
-    User selectUserByPhonePw(User user);
+    List<User> selectUserByPhonePw(User user);
 
     /**
      * 用户登陆或退出修改用户状态

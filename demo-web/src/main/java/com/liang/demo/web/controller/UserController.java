@@ -236,13 +236,60 @@ public class UserController {
         return view;
     }
 
-    @RequestMapping(value="/addUser")
+    @RequestMapping(value = "/addUser")
     @ResponseBody
-    public ModelAndView addUser(){
+    public ModelAndView addUser() {
         ModelAndView view = new ModelAndView();
         view.setViewName("/jspyy/addUser");
         return view;
     }
 
+    @RequestMapping(value = "/resetAddUser")
+    @ResponseBody
+    public ModelAndView resetAddUser() {
+        ModelAndView view = new ModelAndView();
+        view.setViewName("/jspyy/addUser");
+        return view;
+    }
 
+    @RequestMapping(value = "/addUserSave")
+    @ResponseBody
+    public Result addUserSave(@ModelAttribute("user") User user) {
+        Result result = new Result();
+        //BaseUtil.isNullOrEmpty相当于 == null || .equals("")
+        if (BaseUtil.isNullOrEmpty(user.getPhoneId()) || BaseUtil.isNullOrEmpty(user.getPassword()) || user.getUserRole() == null || user.getUserRole() > 3 || user.getUserRole() < 1) {
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("输入参数错误，请重新输入");
+            return result;
+        }
+        try {
+            Integer suc = userService.createdUser(new User(user.getPhoneId(), user.getUserName(), user.getUserRole(), user.getPassword()));
+            if (suc == 1) {
+                result.setSuccess(true);
+                result.setCode(200);
+                result.setMessage("创建成功");
+            } else {
+                result.setSuccess(false);
+                result.setCode(100);
+                result.setMessage("创建失败");
+            }
+        } catch (Error error) {
+            logger.error("创建用户的Controller层出现异常", error);
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("创建用户的Controller层出现异常");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/editUser")
+    @ResponseBody
+    public ModelAndView editUser(@ModelAttribute("user") User user) {
+        ModelAndView view = new ModelAndView();
+        User us = user;
+        view.addObject("userEdit", us);
+        view.setViewName("/jspyy/editUser");
+        return view;
+    }
 }

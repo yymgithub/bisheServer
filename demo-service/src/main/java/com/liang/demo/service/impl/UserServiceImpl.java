@@ -52,9 +52,9 @@ public class UserServiceImpl implements UserService {
     public User userLogin(User user) {
         if (user == null) return null;
         try {
-            User us = userMapper.selectUserByPhonePw(user);
-            if (us == null) return null;
-            else return us;
+            List<User> us = userMapper.selectUserByPhonePw(user);
+            if (us == null || us.size() != 1) return null;
+            else return us.get(0);
         } catch (Error e) {
             logger.error("用户登陆service层异常", e);
         }

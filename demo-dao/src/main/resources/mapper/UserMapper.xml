@@ -37,13 +37,15 @@
     </insert>
     <select id="selectUserByPhonePw" parameterType="com.liang.demo.domain.User"
             resultMap="userResultMap">
-        SELECT * FROM USER WHERE
-        <if test="phoneId!= null">
-            phone_id=#{phoneId}
-        </if>
-        <if test="password!= null ">
-          AND password=#{password}
-        </if>
+        SELECT id,phone_id,user_name,user_role,password,user_state,yn,created,modified FROM USER
+        <where>
+            <if test="phoneId!= null">
+                phone_id=#{phoneId}
+            </if>
+            <if test="password!= null ">
+                AND password=#{password}
+            </if>
+        </where>
     </select>
     <update id="updateUserstate">
         update USER

@@ -18,13 +18,13 @@
 <form action="/user/login" method="post" id="loginForm"  >
 <div class="input-group">
     <span class="input-group-addon" id="basic-addon1"></span>
-    <input id="phoneId" type="text" class="form-control" placeholder="用户名" aria-describedby="basic-addon1" name="user.phoneId">
+    <input id="phoneId" type="text" class="form-control" placeholder="用户名" aria-describedby="basic-addon1" name="phoneId">
 </div>
 <br>
 <!--下面是密码输入框-->
 <div class="input-group">
     <span class="input-group-addon" id="basic-addon1"></span>
-    <input id="passWord" type="password" class="form-control" placeholder="密码" aria-describedby="basic-addon1" name="user.password">
+    <input id="passWord" type="password" class="form-control" placeholder="密码" aria-describedby="basic-addon1" name="password">
 </div>
 <br>
 <!--下面是登陆按钮,包括颜色控制-->

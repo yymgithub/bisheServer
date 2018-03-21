@@ -6,25 +6,25 @@
 </div>
 <br>
 <br>
-<form action="" method="post" class="definewidth m20" id="registerForm" name="registerForm" >
+<form method="post" class="definewidth m20" id="registerForm" name="registerForm" >
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="50%" class="tableleft" style="text-align: left">用户账号</td>
             <td style="text-align: left">
-                <input type="text"  name="user.phoneId"  onblur="test3()" style="width: 200px" id="phone" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;注册账号</span>
+                <input type="text"  name="phoneId"  onblur="test3()" style="width: 200px" id="phone" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;注册账号</span>
             </td>
             <div id="phoneMsg"></div>
         </tr>
         <tr>
             <td width="20%" class="tableleft">用户姓名</td>
             <td>
-                <input type="text"  name="user.userName" style="width: 200px" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;手机对应联系人</span>
+                <input type="text"  name="userName" style="width: 200px" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;手机对应联系人</span>
             </td>
         </tr>
         <tr>
             <td width="20%" class="tableleft"><span style="color:#FF0000;"></span>账号角色</td>
             <td>
-                <select name="user.userRole" id="userRole">
+                <select name="userRole" id="userRole">
                 <option value="1">普通户用</option>
                 <option value="2">操作员</option>
                 <option value="3">管理员</option>
@@ -34,20 +34,20 @@
         <tr>
             <td width="20%" class="tableleft">账号密码</td>
             <td>
-                <input type="password" style="width: 200px" name="user.password" class="password" required="" maxlength="100" /><span style="color: green">&nbsp;&nbsp;密码</span>
+                <input type="password" style="width: 200px" name="password" class="password" required="" maxlength="100" /><span style="color: green">&nbsp;&nbsp;密码</span>
             </td>
         </tr>
         <tr>
             <td width="20%" class="tableleft">确认密码</td>
             <td>
-                <input type="password"  onblur="passwordIsCorrect()" style="width: 200px" name="repeatedPassword" class="repeatedPassword" required="" maxlength="100"/><span style="color: green">&nbsp;&nbsp;账号创建日期</span>
+                <input type="password"  onblur="passwordIsCorrect()" style="width: 200px" name="repeatedPassword" class="repeatedPassword" required="" maxlength="100"/><span style="color: green">&nbsp;&nbsp;重新输入密码</span>
             </td>
             <div id="passwordMsg"></div>
         </tr>
         <tr>
             <td class="tableleft"></td>
             <td>
-                <button type="button" onclick="save()" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">取消</button>
+                <button type="button" onclick="addUserSave()" class="btn btn-primary" type="button" id="checkMessageId">保存</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" name="reset" id="reset">重置</button>
             </td>
         </tr>
     </table>
@@ -80,5 +80,39 @@
         }
     }
 
+    (function (d) {
+        d['okValue'] = '确定';
+        d['cancelValue'] = '取消';
+        d['title'] = '提示';
+        // [more..]
+    })(art.dialog.defaults);
 
+//    function save() {
+//        Pssystem.refreshCenterPage('user/addUserSave', jQuery('#registerForm').serialize());
+//    }
+
+    function addUserSave() {
+        var url = "/user/addUserSave";
+        art.confirm('确定新建该用户？', function () {
+            $.get(url, jQuery('#registerForm').serialize(), function (r) {
+                if (r.code == 200) {
+                    art.alert(r.message);
+                } else {
+                    art.alert(r.message);
+                }
+            });
+        }, function () {
+        });
+    }
+
+    $(function () {
+        $('#reset').click(function () {
+            Pssystem.refreshCenterPage('/user/resetAddUser');
+        });
+    });
+
+    function toHome(){
+        var url = '/versionManage/getVersion?';
+        Pssystem.refreshCenterPage(url);
+    }
 </script>
