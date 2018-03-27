@@ -285,10 +285,96 @@ public class UserController {
 
     @RequestMapping(value = "/editUser")
     @ResponseBody
-    public ModelAndView editUser(@ModelAttribute("user") User user) {
+    public ModelAndView editUser(@ModelAttribute("id") Integer id) {
+        //@ModelAttribute("id") Integer id
         ModelAndView view = new ModelAndView();
-        User us = user;
-        view.addObject("userEdit", us);
+        User us =userService.getUserById(id);
+        view.addObject("userU",us);
+        view.setViewName("/jspyy/editUser");
+        //view.addObject("user", userService.userLogin(new User("15116100440", "123456")));
+        return view;
+    }
+    //修改用户信息之后保存
+    @RequestMapping(value = "/editUserSave")
+    @ResponseBody
+    public Result editUserSave(String phoneId ,String userName,String password ,Integer userRole,Integer yn) {
+
+        Result result = new Result();
+            User user=userService.getUserByPhoneId(phoneId);
+            user.setUserRole(userRole);
+            user.setUserName(userName);
+            user.setYn(yn);
+            user.setPassword(password);
+//        BaseUtil.isNullOrEmpty相当于 == null || .equals("")
+        if (BaseUtil.isNullOrEmpty(phoneId) || BaseUtil.isNullOrEmpty(password) || userRole == null || userRole > 3 || userRole < 1) {
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("输入参数错误，请重新输入");
+            return result;
+        }
+        try {
+            boolean suc = userService.updateUser(user);
+            if (suc) {
+                result.setSuccess(true);
+                result.setCode(200);
+                result.setMessage("修改成功");
+            } else {
+                result.setSuccess(false);
+                result.setCode(100);
+                result.setMessage("修改失败");
+            }
+        } catch (Error error) {
+            logger.error("创建用户的Controller层出现异常", error);
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("创建用户的Controller层出现异常");
+        }
+        return result;
+    }
+
+    //停用或者启用现有用户
+    @RequestMapping(value = "/disableUser")
+    @ResponseBody
+    public Result disableUser(@ModelAttribute("id") Integer id,@ModelAttribute("yn") Integer yn) {
+        User us = userService.getUserById(id);
+        Result result = new Result();
+        if (id == null) {
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("操作失败");
+        }
+        if (us.getYn() == 1) {
+            us.setYn(0);
+        } else {
+            us.setYn(1);
+        }
+        try {
+            boolean suc = userService.updateUserYnById(us);
+            if (suc) {
+                result.setSuccess(true);
+                result.setCode(200);
+                result.setMessage("操作成功");
+            } else {
+                result.setSuccess(false);
+                result.setCode(100);
+                result.setMessage("操作失败");
+            }
+        } catch (Error error) {
+            logger.error("停用或启用用户的Controller层出现异常", error);
+            result.setSuccess(false);
+            result.setCode(100);
+            result.setMessage("停用或启用用户的Controller层出现异常");
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/resetEditUser")
+    @ResponseBody
+    public ModelAndView resetEditUser(@ModelAttribute("id") Integer id) {
+        ModelAndView view = new ModelAndView();
+        User us =userService.getUserById(id);
+        view.addObject("userU",us);
         view.setViewName("/jspyy/editUser");
         return view;
     }

@@ -33,4 +33,16 @@ public interface UserService {
      */
     List<User> getAllUser();
 
+    /**
+     * 获取数据库数据通过id
+     * @param id
+     * @return
+     */
+    User getUserById(Integer id);
+
+    User getUserByPhoneId(String phoneId);
+
+    boolean updateUserYnById(User user);
+
+    boolean updateUser(User user);
 }

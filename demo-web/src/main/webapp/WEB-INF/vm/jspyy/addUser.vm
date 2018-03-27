@@ -11,14 +11,14 @@
         <tr>
             <td width="50%" class="tableleft" style="text-align: left">用户账号</td>
             <td style="text-align: left">
-                <input type="text"  name="phoneId"  onblur="test3()" style="width: 200px" id="phone" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;注册账号</span>
+                <input type="text"  name="phoneId"  onblur="test3()" style="width: 200px" id="phone" class="required" maxlength="100"><span style="color: green">&nbsp;&nbsp;注册账号</span>
             </td>
             <div id="phoneMsg"></div>
         </tr>
         <tr>
             <td width="20%" class="tableleft">用户姓名</td>
             <td>
-                <input type="text"  name="userName" style="width: 200px" class="required" maxlength="100" /><span style="color: green">&nbsp;&nbsp;手机对应联系人</span>
+                <input type="text"  name="userName" style="width: 200px" class="required" maxlength="100"><span style="color: green">&nbsp;&nbsp;手机对应联系人</span>
             </td>
         </tr>
         <tr>
@@ -34,13 +34,13 @@
         <tr>
             <td width="20%" class="tableleft">账号密码</td>
             <td>
-                <input type="password" style="width: 200px" name="password" class="password" required="" maxlength="100" /><span style="color: green">&nbsp;&nbsp;密码</span>
+                <input type="password" style="width: 200px" name="password" class="password" required="" maxlength="100"><span style="color: green">&nbsp;&nbsp;密码</span>
             </td>
         </tr>
         <tr>
             <td width="20%" class="tableleft">确认密码</td>
             <td>
-                <input type="password"  onblur="passwordIsCorrect()" style="width: 200px" name="repeatedPassword" class="repeatedPassword" required="" maxlength="100"/><span style="color: green">&nbsp;&nbsp;重新输入密码</span>
+                <input type="password"  onblur="passwordIsCorrect()" style="width: 200px" name="repeatedPassword" class="repeatedPassword" required="" maxlength="100"><span style="color: green">&nbsp;&nbsp;重新输入密码</span>
             </td>
             <div id="passwordMsg"></div>
         </tr>
@@ -111,8 +111,4 @@
         });
     });
 
-    function toHome(){
-        var url = '/versionManage/getVersion?';
-        Pssystem.refreshCenterPage(url);
-    }
 </script>

@@ -1,6 +1,7 @@
 package com.liang.demo.dao;
 
 import com.liang.demo.domain.User;
+import org.apache.ibatis.annotations.Param;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +31,31 @@ public interface UserMapper {
      */
     Integer updateUserstate(User user);
 
+    /**
+     * 获得数据库表的所有User
+     * @return
+     */
     List<User> getALLUser();
+    /**
+     * 通过id获取用户信息
+     */
+    List<User> getUserById(@Param("id") Integer id);
+    /**
+     * 通过phoneId获取用户信息
+     */
+    List<User> getUserByPhoneId(@Param("phoneId") String phoneId);
+
+    /**
+     * 通过Id更新用户是否有效
+     * @param user
+     * @return
+     */
+    Integer updateUserYnById(User user);
+    /**
+     * 通过修改用户界面实现用户信息修改
+     * @param user
+     * @return
+     */
+    Integer updateUser(User user);
 
 }

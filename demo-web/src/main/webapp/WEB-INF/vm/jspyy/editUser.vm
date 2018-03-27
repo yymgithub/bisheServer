@@ -3,68 +3,85 @@
     <div class="panel-heading" style="text-align: center; font-size: 20px">
         修改账户信息
     </div>
-    </div>
     <br>
     <br>
-    #*<form  method="post" class="definewidth m20" id="editForm" >
+    <form class="definewidth m20" id="editFormResult" name="editFormResult">
         <table class="table table-bordered table-hover definewidth m10">
             <tr>
                 <td width="50%" class="tableleft" style="text-align: right">用户账号</td>
                 <td style="text-align: left">
-                    <input type="text" readonly="readonly" style="width: 200px" name="phoneId" class="required" maxlength="100" value=$!{user.phoneId}/><span style="color: green">&nbsp;&nbsp;注册账号$!{user.phoneId}</span>
+                    <input type="text" readonly="readonly" style="width: 200px" name="phoneId" class="required"
+                           maxlength="100" value=$!{userU.phoneId}>
+                    <span style="color: green">&nbsp;&nbsp;注册账号$!{userU.phoneId}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">用户姓名</td>
                 <td>
-                    <input type="text" style="width: 200px" name="userName" class="required" maxlength="100" value=$!{user.userName} /><span style="color: green">&nbsp;&nbsp;手机对应联系人$!{user.userName}</span>
+                    <input type="text" style="width: 200px" name="userName" class="required" maxlength="100"
+                           value=$!{userU.userName}><span
+                        style="color: green">&nbsp;&nbsp;手机对应联系人$!{userU.userName}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft"><span style="color:#FF0000;"></span>账号角色</td>
                 <td>
-                    <input type="text" style="width: 200px" name="userRole" class="required" maxlength="100" value=$!{user.userRole} /><span style="color: green">&nbsp;&nbsp;角色包含3-管理员 1-普通用户和2-操作员$!{user.userRole}</span>
+                    <input type="text" style="width: 200px" name="userRole" class="required" maxlength="100"
+                           value=$!{userU.userRole}><span
+                        style="color: green">&nbsp;&nbsp;角色包含3-管理员1-普通用户2-操作员$!{userU.userRole}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">账号密码</td>
                 <td>
-                    <input type="text" style="width: 200px" name="password" class="required" maxlength="100" value=$!{user.password} /><span style="color: green">&nbsp;&nbsp;密码$!{user.password}</span>
+                    <input type="text" style="width: 200px" name="password" class="required" maxlength="100"
+                           value=$!{userU.password}><span style="color: green">&nbsp;&nbsp;密码$!{userU.password}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">账号状态</td>
                 <td>
-                    <input type="text"  readonly="readonly" style="width: 200px" name="userState" class="required" maxlength="100" value=$!{user.userState} /><span style="color: green">&nbsp;&nbsp;状态$!{user.userState}</span>
+                    <input type="text" readonly="readonly" style="width: 200px" name="userState" class="required"
+                           maxlength="100" value=$!{userU.userState}><span
+                        style="color: green">&nbsp;&nbsp;状态$!{userU.userState}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">账号是否有效</td>
                 <td>
-                    <input type="text" style="width: 200px" name="yn" class="required" maxlength="100" value=$!{user.yn} /><span style="color: green">&nbsp;&nbsp;1代表有效$!{user.yn}</span>
+                    <input type="text" style="width: 200px" name="yn" class="required" maxlength="100"
+                           value=$!{userU.yn}><span style="color: green">&nbsp;&nbsp;1代表有效$!{userU.yn}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">账号创建日期</td>
                 <td>
-                    <input type="text"  readonly="readonly" style="width: 200px" name="created" class="required" maxlength="100" value=$!{user.created} /><span style="color: green">&nbsp;&nbsp;账号创建日期$!{user.created}</span>
+                    <input type="text" readonly="readonly" style="width: 200px" name="created" class="required"
+                           maxlength="100" value=$!dateTool.format("yyyy-MM-dd/HH:mm:ss",$userU.created)><span
+                        style="color: green">&nbsp;&nbsp;账号创建日期$!{userU.created}</span>
                 </td>
             </tr>
             <tr>
                 <td width="20%" class="tableleft">账号修改日期日期</td>
                 <td>
-                    <input type="text"  readonly="readonly" style="width: 200px" name="modified" class="required" maxlength="100" value=$!{user.modified} /><span style="color: green">&nbsp;&nbsp;账号更新日期$!{user.modified}</span>
+                    <input type="datetime" readonly="readonly" style="width: 200px" name="modified" class="required"
+                           maxlength="100" value= $!dateTool.format("yyyy-MM-dd/HH:mm:ss",$userU.modified)>
+                ##                    $!dateTool.format("yyyy-MM-dd HH:mm:ss",$userU.modified)
+                    <span style="color: green">&nbsp;&nbsp;账号更新日期$!{userU.modified}</span>
                 </td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <button type="button" onclick="editUserSave()" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">重置</button>
+                    <button type="button" onclick="editUserSave()" class="btn btn-primary">保存</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="button" onclick="resetEditUser($!{userU.id})" class="btn btn-success">重置</button>
                 </td>
             </tr>
         </table>
-    </form>*#
+    </form>
 </div>
+
 <script>
     (function (d) {
         d['okValue'] = '确定';
@@ -74,9 +91,9 @@
     })(art.dialog.defaults);
 
     function editUserSave() {
-        var url = "/user/addUserSave";
-        art.confirm('确定新建该用户？', function () {
-            $.get(url, jQuery('#registerForm').serialize(), function (r) {
+        var url = "/user/editUserSave";
+        art.confirm('确定保存修改？', function () {
+            $.get(url, jQuery('#editFormResult').serialize(), function (r) {
                 if (r.code == 200) {
                     art.alert(r.message);
                 } else {
@@ -87,4 +104,8 @@
         });
     }
 
+    function resetEditUser(id) {
+        var url = '/user/resetEditUser?id=' + id;
+        Pssystem.refreshCenterPage(url);
+    }
 </script>

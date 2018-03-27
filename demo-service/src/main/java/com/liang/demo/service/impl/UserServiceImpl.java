@@ -89,4 +89,62 @@ public class UserServiceImpl implements UserService {
         return userList;
 
     }
+
+    /**
+     * 获取数据库数据通过id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public User getUserById(Integer id) {
+        if (id == null) return null;
+        try {
+            /*List<User> us =null;*/
+            List<User> us= userMapper.getUserById(id);
+            if (us == null || us.size() != 1) return null;
+            else return us.get(0);
+        } catch (Throwable e) {
+            logger.error("修改用户信息时service层异常", e);
+        }
+        return null;
+    }
+
+    @Override
+    public User getUserByPhoneId(String phoneId) {
+        if (phoneId == null) return null;
+        try {
+            /*List<User> us =null;*/
+            List<User> us= userMapper.getUserByPhoneId(phoneId);
+            if (us == null || us.size() != 1) return null;
+            else return us.get(0);
+        } catch (Throwable e) {
+            logger.error("修改用户信息时service层异常", e);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean updateUserYnById(User user) {
+        if(user==null) return false;
+        try{
+            Integer result=userMapper.updateUserYnById(user);
+            if(result==1) return true;
+        }catch(Throwable e){
+            logger.error("停用用户信息时service层异常", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        if(user==null) return false;
+        try{
+            Integer result=userMapper.updateUser(user);
+            if(result==1) return true;
+        }catch(Throwable e){
+            logger.error("停用用户信息时service层异常", e);
+        }
+        return false;
+    }
 }

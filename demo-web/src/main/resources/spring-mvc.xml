@@ -51,6 +51,9 @@
         <property name="suffix" value=".vm"/>
         <property name="contentType"><value>text/html;charset=UTF-8</value></property>
         <property name="exposeSpringMacroHelpers" value="true" /><!--是否使用spring对宏定义的支持-->
+        <property name="dateToolAttribute">
+            <value>dateTool</value>
+        </property>
     </bean>
 
 

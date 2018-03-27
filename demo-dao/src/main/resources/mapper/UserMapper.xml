@@ -61,5 +61,47 @@
             resultMap="userResultMap">
             SELECT * FROM USER
     </select>
+
+    <select id="getUserById" parameterType="java.lang.Integer"
+            resultMap="userResultMap">
+        SELECT id,phone_id,user_name,user_role,password,user_state,yn,created,modified FROM USER
+        <where>
+            <if test="id!= null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUserYnById">
+        update USER
+        <set>
+            yn=#{yn}
+        </set>
+        WHERE
+        <if test="id!= null">
+          id=#{id}
+        </if>
+    </update>
+
+    <update id="updateUser">
+        update USER
+        <set>
+            user_name=#{userName},user_role=#{userRole},password=#{password},yn=#{yn},modified=now()
+        </set>
+        WHERE
+        <if test="id!= null">
+            id=#{id}
+        </if>
+    </update>
+
+    <select id="getUserByPhoneId" parameterType="java.lang.String"
+            resultMap="userResultMap">
+        SELECT id,phone_id,user_name,user_role,password,user_state,yn,created,modified FROM USER
+        <where>
+            <if test="phoneId!= null">
+                phone_id=#{phoneId}
+            </if>
+        </where>
+    </select>
 </mapper>
 

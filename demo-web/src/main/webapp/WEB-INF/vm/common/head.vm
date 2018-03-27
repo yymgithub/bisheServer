@@ -56,7 +56,7 @@
      <script type="text/javascript" src="/js/bootstrap/date/bootstrap-datetimepicker.zh-CN.js"></script>
 
      <script type="text/javascript" src="/resources/js/validate-message-cn.js"></script>
-     <script type="text/javascript" src="resources/datepicker/WdatePicker.js"></script>
+     <script type="text/javascript" src="/resources/datepicker/WdatePicker.js"></script>
      <script type="text/javascript" src="/js/artDialog/artDialog.min.js" ></script>
      <script type="text/javascript" src="/js/artDialog/artDialog.plugins.min.js"></script>
 

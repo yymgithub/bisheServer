@@ -38,4 +38,9 @@ public class User {
     public User(){
 
     };
+
+    public User(String phoneId, String password) {
+        this.phoneId = phoneId;
+        this.password = password;
+    }
 }

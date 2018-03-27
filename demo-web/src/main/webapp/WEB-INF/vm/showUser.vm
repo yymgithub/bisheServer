@@ -48,37 +48,55 @@
                             <th>状态</th>
                             <th>创建时间</th>
                             <th>修改时间</th>
+                            <th>是否有效</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         #foreach($user in ${page.datas})
-                            <tr>
-                                <td>
-                                    $!{user.phoneId}
-                                </td>
-                                <td>
-                                    $!{user.userName}
-                                </td>
-                                <td>
-                                    $!{user.userRole}
-                                </td>
-                                <td>
-                                    $!{user.password}
-                                </td>
-                                <td>
-                                    $!{user.userState}
-                                </td>
-                                <td>
-                                    $!{user.created}
-                                </td>
-                                <td>
-                                    $!{user.modified}
-                                </td>
-                                <td>
-                                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-primary" name="editUser" id="editUser">修改</button>
-                                   &nbsp; &nbsp;&nbsp;&nbsp;<button class="btn btn-info btn-danger" style="margin-left:3px">停用</button>
-                                </td>
-                            </tr>
+                            <form class="form-horizontal" id="toEditUser">
+                                <tr>
+                                    <td>
+                                        $!{user.phoneId}
+                                    </td>
+                                    <td>
+                                        $!{user.userName}
+                                    </td>
+                                    <td>
+                                        $!{user.userRole}
+                                    </td>
+                                    <td>
+                                        $!{user.password}
+                                    </td>
+                                    <td>
+                                        $!{user.userState}
+                                    </td>
+                                    <td>
+                                        $!{user.created}
+                                    </td>
+                                    <td>
+                                        $!{user.modified}
+                                    </td>
+                                    <td>
+                                        $!{user.yn}
+                                    </td>
+                                    <td>
+                                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                        #*<input type="button" onclick="editUser($!{user.id})" value="修改"/>*#
+                                        <button class="btn btn-info btn-primary" type="button" onclick="editUser($!{user.id})">
+                                            修改
+                                        </button>
+                                        &nbsp; &nbsp;&nbsp;&nbsp;
+
+                                        <button class="btn btn-info btn-danger" type="button"  onclick="disableUser($!{user.id},$!{user.yn})">
+                                         #if($!{user.yn}==1)
+                                            停用
+                                         #else
+                                             启用
+                                         #end
+                                        </button>
+                                    </td>
+                                </tr>
+                            </form>
                         #end
                     </table>
                     #pager(${page} "/user/showUser" "showUser")
@@ -91,9 +109,65 @@
 </form>
 
 <script>
-    $(function () {
+ /*   $(function () {
+        var id =
         $('#editUser').click(function () {
-            Pssystem.refreshCenterPage('/user/editUser',jQuery('#showUser').serialize());
+            Pssystem.refreshCenterPage('/user/editUser');
         });
-    });
+    });*/
+// function clickButton() {
+//     if (objTmp == window.event.srcElement) {
+//         objTmp.value = "点了";
+//     }
+//     else {
+//         objTmp.value = "没点";
+//     }
+//
+// }
+
+ (function (d) {
+     d['okValue'] = '确定';
+     d['cancelValue'] = '取消';
+     d['title'] = '提示';
+     // [more..]
+ })(art.dialog.defaults);
+
+ //    function save() {
+ //        Pssystem.refreshCenterPage('user/addUserSave', jQuery('#registerForm').serialize());
+ //    }
+
+ function disableUser(id,yn) {
+     var url = '/user/disableUser?id='+id+'&yn='+yn;
+     if(yn==1){
+         art.confirm('确定停用该用户？', function () {
+             $.get(url, jQuery('#showUser').serialize(), function (r) {
+                 if (r.code == 200) {
+                     art.alert(r.message);
+                 } else {
+                     art.alert(r.message);
+                 }
+             });
+         }, function () {
+         });
+     }
+     else{
+         art.confirm('确定启用该用户？', function () {
+             $.get(url, jQuery('#showUser').serialize(), function (r) {
+                 if (r.code == 200) {
+                     art.alert(r.message);
+                 } else {
+                     art.alert(r.message);
+                 }
+             });
+         }, function () {
+         });
+     }
+ }
+
+
+ function editUser(id) {
+        var url = '/user/editUser?id='+id;
+        Pssystem.refreshCenterPage(url);
+
+    }
 </script>
