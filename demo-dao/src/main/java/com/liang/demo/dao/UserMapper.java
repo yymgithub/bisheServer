@@ -58,4 +58,11 @@ public interface UserMapper {
      */
     Integer updateUser(User user);
 
+    /**
+     * 实现
+     * @param user
+     * @return
+     */
+    List<User> getUserListByCondition(User user);
+
 }

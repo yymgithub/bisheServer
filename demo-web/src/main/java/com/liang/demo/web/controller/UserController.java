@@ -6,6 +6,7 @@ import com.liang.demo.domain.Result;
 import com.liang.demo.domain.User;
 import com.liang.demo.service.UserService;
 import com.liang.demo.util.BaseUtil;
+import com.liang.demo.util.WeList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -205,24 +206,39 @@ public class UserController {
 
     @RequestMapping(value = "/showUser")
     @ResponseBody
-    public ModelAndView showUser(@ModelAttribute("page") Page page) {
+    public ModelAndView showUser(String phoneId, Integer userRole, Integer userState, @ModelAttribute("page") Page page) {
         ModelAndView view = new ModelAndView();
         List<User> userList = new ArrayList<>();
-        userList = userService.getAllUser();
         Page pageP = new Page();
+        if (page.getPage() == null) {
+            page.setPage(1);
+            if (!BaseUtil.isNullOrEmpty(phoneId) || userRole != null || userState != null) {
+                User userFilter = new User();
+                if(phoneId.equals("")){
+                    userFilter.setPhoneId(null);
+                }
+                else{
+                    userFilter.setPhoneId(phoneId);
+                }
+                userFilter.setUserRole(userRole);
+                userFilter.setUserState(userState);
+                userList = userService.getUserListByCondition(userFilter);
+                WeList.addList(userList);
+            }else {
+                userList = userService.getAllUser();
+                WeList.addList(userList);
+            }
+        }
         //pageP.setDatas(userList);
         //设置每页多少条
         pageP.setItemsPerPage(1);
-        pageP.setItems(userList.size());
-        if (page.getPage() == null) {
-            page.setPage(1);
-        }
+        pageP.setItems(WeList.userList.size());
         pageP.setPage(page.getPage());
         List<User> perList = new ArrayList<>();
         int num = 0;
         int a = pageP.getItemsPerPage() * pageP.getPage();
         int b = a - pageP.getItemsPerPage() + 1;
-        for (User user : userList) {
+        for (User user : WeList.userList) {
             num++;
             if (num >= b && num <= a) {
                 perList.add(user);
@@ -288,23 +304,24 @@ public class UserController {
     public ModelAndView editUser(@ModelAttribute("id") Integer id) {
         //@ModelAttribute("id") Integer id
         ModelAndView view = new ModelAndView();
-        User us =userService.getUserById(id);
-        view.addObject("userU",us);
+        User us = userService.getUserById(id);
+        view.addObject("userU", us);
         view.setViewName("/jspyy/editUser");
         //view.addObject("user", userService.userLogin(new User("15116100440", "123456")));
         return view;
     }
+
     //修改用户信息之后保存
     @RequestMapping(value = "/editUserSave")
     @ResponseBody
-    public Result editUserSave(String phoneId ,String userName,String password ,Integer userRole,Integer yn) {
+    public Result editUserSave(String phoneId, String userName, String password, Integer userRole, Integer yn) {
 
         Result result = new Result();
-            User user=userService.getUserByPhoneId(phoneId);
-            user.setUserRole(userRole);
-            user.setUserName(userName);
-            user.setYn(yn);
-            user.setPassword(password);
+        User user = userService.getUserByPhoneId(phoneId);
+        user.setUserRole(userRole);
+        user.setUserName(userName);
+        user.setYn(yn);
+        user.setPassword(password);
 //        BaseUtil.isNullOrEmpty相当于 == null || .equals("")
         if (BaseUtil.isNullOrEmpty(phoneId) || BaseUtil.isNullOrEmpty(password) || userRole == null || userRole > 3 || userRole < 1) {
             result.setSuccess(false);
@@ -335,7 +352,7 @@ public class UserController {
     //停用或者启用现有用户
     @RequestMapping(value = "/disableUser")
     @ResponseBody
-    public Result disableUser(@ModelAttribute("id") Integer id,@ModelAttribute("yn") Integer yn) {
+    public Result disableUser(@ModelAttribute("id") Integer id, @ModelAttribute("yn") Integer yn) {
         User us = userService.getUserById(id);
         Result result = new Result();
         if (id == null) {
@@ -373,9 +390,43 @@ public class UserController {
     @ResponseBody
     public ModelAndView resetEditUser(@ModelAttribute("id") Integer id) {
         ModelAndView view = new ModelAndView();
-        User us =userService.getUserById(id);
-        view.addObject("userU",us);
+        User us = userService.getUserById(id);
+        view.addObject("userU", us);
         view.setViewName("/jspyy/editUser");
+        return view;
+    }
+
+    //用户搜索功能实现
+    @RequestMapping(value = "/searchUser")
+    @ResponseBody
+    public ModelAndView searchUser(String phoneId, Integer userRole, Integer userState, @ModelAttribute("page") Page page) {
+        ModelAndView view = new ModelAndView();
+        List<User> userList = new ArrayList<>();
+        User us = new User();
+        if (BaseUtil.isNullOrEmpty(phoneId))
+            userList = userService.getAllUser();
+        Page pageP = new Page();
+        pageP.setItemsPerPage(1);
+        pageP.setItems(userList.size());
+        if (page.getPage() == null) {
+            page.setPage(1);
+        }
+        pageP.setPage(page.getPage());
+        List<User> perList = new ArrayList<>();
+        int num = 0;
+        int a = pageP.getItemsPerPage() * pageP.getPage();
+        int b = a - pageP.getItemsPerPage() + 1;
+        for (User user : userList) {
+            num++;
+            if (num >= b && num <= a) {
+                perList.add(user);
+            }
+        }
+        pageP.setDatas(perList);
+
+        //view.addObject("userList",userList);
+        view.addObject("page", pageP);
+        view.setViewName("/showUser");
         return view;
     }
 }

@@ -45,4 +45,6 @@ public interface UserService {
     boolean updateUserYnById(User user);
 
     boolean updateUser(User user);
+
+    List<User> getUserListByCondition(User user);
 }

@@ -103,5 +103,21 @@
             </if>
         </where>
     </select>
+
+    <select id="getUserListByCondition" parameterType="com.liang.demo.domain.User"
+            resultMap="userResultMap">
+        SELECT id,phone_id,user_name,user_role,password,user_state,yn,created,modified FROM USER
+        <where>
+            <if test="phoneId!= null">
+                phone_id LIKE CONCAT(CONCAT('%',#{phoneId}),'%')
+            </if>
+            <if test="userRole!= null ">
+                AND user_role=#{userRole}
+            </if>
+            <if test="userState!= null ">
+                AND user_state=#{userState}
+            </if>
+        </where>
+    </select>
 </mapper>
 

@@ -147,4 +147,22 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    /**
+     * 根据条件搜索符合条件的用户
+     * @param user
+     * @return
+     */
+    @Override
+    public List<User> getUserListByCondition(User user) {
+        List<User> userList=new ArrayList<>();
+        try{
+            userList=userMapper.getUserListByCondition(user);
+
+        }catch (Throwable e){
+            logger.error("搜索用户service层异常", e);
+        }
+        return userList;
+
+    }
 }
