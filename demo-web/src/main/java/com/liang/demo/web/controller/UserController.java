@@ -83,12 +83,20 @@ public class UserController {
 
         ModelAndView view = new ModelAndView();
         User us = userService.userLogin(user);
-        if (us == null || us.getUserRole() != 3) {
+        if (us == null) {
             view.setViewName("login");
             //view.setViewName("/a");
             Result result = new Result();
             result.setCode(0);
             result.setMessage("账户或密码错误");
+            view.addObject("msg",result);
+            return view;
+        }
+        if (us.getUserRole() != 3) {
+            view.setViewName("login");
+            Result result = new Result();
+            result.setCode(0);
+            result.setMessage("该账户非管理员账户");
             view.addObject("msg",result);
             return view;
         }
