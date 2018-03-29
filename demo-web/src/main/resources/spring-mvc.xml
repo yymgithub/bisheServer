@@ -54,6 +54,10 @@
         <property name="dateToolAttribute">
             <value>dateTool</value>
         </property>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="allowSessionOverride" value="true"/>
+        <property name="allowRequestOverride" value="true"/>
     </bean>
 
 

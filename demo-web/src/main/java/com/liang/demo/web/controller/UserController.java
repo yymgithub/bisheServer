@@ -68,6 +68,14 @@ public class UserController {
         return "screen/index";
     }
 
+    @RequestMapping(value = "/toLogin")
+    @ResponseBody
+    public ModelAndView toLogin(){
+        ModelAndView view = new ModelAndView();
+        view.setViewName("login");
+        return view;
+    }
+
     @RequestMapping(value = "/login")
     @ResponseBody
     public ModelAndView login(@ModelAttribute("user") User user) {
@@ -76,7 +84,12 @@ public class UserController {
         ModelAndView view = new ModelAndView();
         User us = userService.userLogin(user);
         if (us == null || us.getUserRole() != 3) {
-            view.setViewName("../../login");
+            view.setViewName("login");
+            //view.setViewName("/a");
+            Result result = new Result();
+            result.setCode(0);
+            result.setMessage("账户或密码错误");
+            view.addObject("msg",result);
             return view;
         }
 //        us.setUserState(1);
@@ -87,6 +100,7 @@ public class UserController {
 //        }
 
         view.addObject("user", us);
+        view.addObject("adjuse","ok");
 //          httpSession.setAttribute("user",us);
         //界面显示Menu初始化代码
         List<Menu> menuVoList = new ArrayList<>();
@@ -199,8 +213,7 @@ public class UserController {
     @ResponseBody
     public ModelAndView userLogout() {
         ModelAndView view = new ModelAndView();
-
-        view.setViewName("../../login");
+        view.setViewName("login");
         return view;
     }
 
