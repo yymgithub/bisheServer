@@ -39,4 +39,23 @@ public class PsBenchServiceImpl  implements PsBenchService {
         return benchList;
 
     }
+
+    /**
+     * APP进行命令控制时通过PSID获取台架停车或者报警信息进行判断和操作
+     *
+     * @param psId
+     * @return
+     */
+    @Override
+    public PsBench selectPsBenchByPsId(Integer psId) {
+        if(psId==null) return null;
+        try{
+            PsBench psBench=psBenchMapper.selectPsBenchByPsId(psId);
+            if(psBench==null) return null;
+            return psBench;
+        }catch (Throwable e){
+            logger.error("通过psId获得台架停车和报警状态时Service层出错",e);
+        }
+        return null;
+    }
 }

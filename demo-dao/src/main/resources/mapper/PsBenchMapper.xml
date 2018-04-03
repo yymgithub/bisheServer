@@ -10,6 +10,8 @@
     <resultMap id="psBenchResultMap" type="com.liang.demo.domain.PsBench" autoMapping="false">
         <id property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
         <result property="psName" column="ps_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="psStop" column="ps_stop" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psAlarm" column="ps_alarm" javaType="Integer" jdbcType="INTEGER"/>
         <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
         <result property="created" column="created" jdbcType="TIMESTAMP"/>
         <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
@@ -19,6 +21,39 @@
             resultMap="psBenchResultMap">
         SELECT * FROM PS_BENCH
     </select>
+
+    <select id="selectPsBenchByPsId" parameterType="java.lang.Integer"
+            resultMap="psBenchResultMap">
+        SELECT ps_id,ps_name,ps_stop,ps_alarm,yn,created,modified
+        FROM PS_BENCH
+        <where>
+            <if test="psId!= null">
+                ps_id=#{psId}
+            </if>
+        </where>
+    </select>
+
+    <update id="updatePsBenchStop">
+        update PS_BENCH
+        <set>
+            ps_stop=#{psStop}
+        </set>
+        WHERE
+        <if test="psId!= null">
+            ps_id=#{psId}
+        </if>
+    </update>
+
+    <update id="updatePsBenchAlarm">
+        update PS_BENCH
+        <set>
+            ps_alarm=#{psAlarm}
+        </set>
+        WHERE
+        <if test="psId!= null">
+            ps_id=#{psId}
+        </if>
+    </update>
 
 </mapper>
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsDeviceAlarmMapper">
+
+
+    <resultMap id="psDeviceAlarmResultMap" type="com.liang.demo.domain.PsCommand" autoMapping="false">
+        <id property="alarmId" column="alarm_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="deState" column="de_state" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertPsDeviceAlarm" parameterType="com.liang.demo.domain.PsDeviceAlarm">
+        INSERT PS_DEVICEALARM (ps_id,de_state,yn,created)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="deState != null">
+            #{deState},
+        </if>
+        1,now()
+
+        )
+    </insert>
+</mapper>

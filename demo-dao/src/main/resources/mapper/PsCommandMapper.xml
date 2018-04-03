@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsCommandMapper">
+
+
+    <resultMap id="psCommandResultMap" type="com.liang.demo.domain.PsCommand" autoMapping="false">
+        <id property="comId" column="com_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="comName" column="com_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="phoneId" column="phone_id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="comState" column="com_state" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertPsCommand" parameterType="com.liang.demo.domain.PsCommand">
+        INSERT PS_COMMAND (ps_id,com_name,phone_id,yn,created,com_state)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="comName != null">
+            #{comName},
+        </if>
+        <if test="phoneId != null">
+            #{phoneId},
+        </if>
+        1,now(),2
+        )
+    </insert>
+</mapper>

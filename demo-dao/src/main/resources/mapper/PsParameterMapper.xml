@@ -29,5 +29,16 @@
             </if>
         </where>
     </select>
+
+    <update id="updatePsParameterByParaId">
+        update PS_PARAMETER
+        <set>
+            para_value=#{paraValue}
+        </set>
+        WHERE
+        <if test="paraId!= null">
+            para_id=#{paraId}
+        </if>
+    </update>
 </mapper>
 

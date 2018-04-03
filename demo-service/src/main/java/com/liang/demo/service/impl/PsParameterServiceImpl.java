@@ -39,4 +39,23 @@ public class PsParameterServiceImpl implements PsParameterService {
         }
         return psParameterList;
     }
+
+    /**
+     * 更新参数值通过主键
+     *
+     * @param psParameter
+     * @return
+     */
+    @Override
+    public boolean updatePsParameterByParaId(PsParameter psParameter) {
+        if(psParameter==null) return false;
+        try{
+        if(psParameterMapper.updatePsParameterByParaId(psParameter)==1){
+            return true;
+        }
+        }catch (Throwable e){
+            logger.error("通过参数表主键更新参数值时Service层出错",e);
+        }
+        return false;
+    }
 }

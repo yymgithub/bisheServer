@@ -12,4 +12,11 @@ public interface PsBenchService {
      * @return
      */
     List<PsBench> getAllPsBench();
+
+    /**
+     * APP进行命令控制时通过PSID获取台架停车或者报警信息进行判断和操作
+     * @param psId
+     * @return
+     */
+    PsBench selectPsBenchByPsId(Integer psId);
 }

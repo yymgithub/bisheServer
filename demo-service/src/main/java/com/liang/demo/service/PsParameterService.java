@@ -14,4 +14,11 @@ public interface PsParameterService {
      * @return
      */
     List<PsParameter> getPsParameterByPsId(Integer psId);
+
+    /**
+     * 更新参数值通过主键
+     * @param psParameter
+     * @return
+     */
+    boolean updatePsParameterByParaId(PsParameter psParameter);
 }

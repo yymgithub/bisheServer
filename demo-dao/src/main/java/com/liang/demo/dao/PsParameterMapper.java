@@ -17,4 +17,11 @@ public interface PsParameterMapper {
      * @return
      */
     List<PsParameter> getPsParameterByPsId(@Param("psId") Integer psId);
+
+    /**
+     * 更新参数表通过主键paraId
+     * @param psParameter
+     * @return
+     */
+    Integer updatePsParameterByParaId(PsParameter psParameter);
 }
