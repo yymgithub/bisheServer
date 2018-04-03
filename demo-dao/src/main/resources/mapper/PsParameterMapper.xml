@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsParameterMapper">
+
+
+    <resultMap id="psParameterResultMap" type="com.liang.demo.domain.PsParameter" autoMapping="false">
+        <id property="paraId" column="para_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="paraName" column="para_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="paraValue" column="para_value" javaType="double" jdbcType="DOUBLE"/>
+        <result property="paraUnit" column="para_unit" javaType="String" jdbcType="VARCHAR"/>
+        <result property="paraFormat" column="para_format" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getPsParameterByPsId" parameterType="java.lang.Integer"
+            resultMap="psParameterResultMap">
+        SELECT para_id,ps_id,para_name,para_value,para_unit,para_format,yn,created,modified
+        FROM PS_PARAMETER
+        <where>
+            <if test="psId!= null">
+                ps_id=#{psId}
+            </if>
+        </where>
+    </select>
+</mapper>
+

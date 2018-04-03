@@ -12,4 +12,6 @@ public class Result {
     private Integer code;
     //code码的解释
     private String message;
+    //数据
+    private Object data;
 }

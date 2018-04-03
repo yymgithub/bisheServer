@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PSBenchMapper">
+
+
+    <resultMap id="psBenchResultMap" type="com.liang.demo.domain.PsBench" autoMapping="false">
+        <id property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psName" column="ps_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getAllPsBench" parameterType="com.liang.demo.domain.PsBench"
+            resultMap="psBenchResultMap">
+        SELECT * FROM PS_BENCH
+    </select>
+
+</mapper>
+

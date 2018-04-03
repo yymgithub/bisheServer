@@ -1,9 +1,7 @@
 package com.liang.demo.web.controller;
 
-import com.liang.demo.domain.Menu;
-import com.liang.demo.domain.Page;
-import com.liang.demo.domain.Result;
-import com.liang.demo.domain.User;
+import com.liang.demo.domain.*;
+import com.liang.demo.service.PsBenchService;
 import com.liang.demo.service.UserService;
 import com.liang.demo.util.BaseUtil;
 import com.liang.demo.util.WeList;
@@ -17,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -25,6 +25,8 @@ public class UserController {
 
     @Resource
     private UserService userService;
+    @Resource
+    private PsBenchService psBenchService;
 
     public static final Logger logger = LogManager.getLogger(UserController.class);
 
@@ -62,15 +64,43 @@ public class UserController {
 
     @RequestMapping(value = "/appLogin")
     @ResponseBody
-    public String userLogin(String phoneId, String password) {
-
-//        System.out.println(user.toString());
-        return "screen/index";
+    public Result userLogin(String phoneId, String password) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<PsBench> psBenchList=new ArrayList<>();
+        Result result = new Result();
+        if (BaseUtil.isNullOrEmpty(phoneId) || BaseUtil.isNullOrEmpty(password)) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("输入参数错误，请重新输入");
+            return result;
+        }
+        try {
+            User us = userService.userLogin(new User(phoneId, password));
+            if (us != null) {
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("登陆成功");
+                psBenchList=psBenchService.getAllPsBench();
+                map.put("user", us);
+                map.put("psBenchList",psBenchList);
+                result.setData(map);
+            } else {
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("登陆失败");
+            }
+        } catch (Throwable error) {
+            logger.error("APP登陆Controller层出现异常", error);
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("APP登陆Controller层出现异常");
+        }
+        return result;
     }
 
     @RequestMapping(value = "/toLogin")
     @ResponseBody
-    public ModelAndView toLogin(){
+    public ModelAndView toLogin() {
         ModelAndView view = new ModelAndView();
         view.setViewName("login");
         return view;
@@ -89,7 +119,7 @@ public class UserController {
             Result result = new Result();
             result.setCode(0);
             result.setMessage("账户或密码错误");
-            view.addObject("msg",result);
+            view.addObject("msg", result);
             return view;
         }
         if (us.getUserRole() != 3) {
@@ -97,7 +127,7 @@ public class UserController {
             Result result = new Result();
             result.setCode(0);
             result.setMessage("该账户非管理员账户");
-            view.addObject("msg",result);
+            view.addObject("msg", result);
             return view;
         }
 //        us.setUserState(1);
@@ -108,7 +138,6 @@ public class UserController {
 //        }
 
         view.addObject("user", us);
-        view.addObject("adjuse","ok");
 //          httpSession.setAttribute("user",us);
         //界面显示Menu初始化代码
         List<Menu> menuVoList = new ArrayList<>();
@@ -235,17 +264,16 @@ public class UserController {
             page.setPage(1);
             if (!BaseUtil.isNullOrEmpty(phoneId) || userRole != null || userState != null) {
                 User userFilter = new User();
-                if(phoneId.equals("")){
+                if (phoneId.equals("")) {
                     userFilter.setPhoneId(null);
-                }
-                else{
+                } else {
                     userFilter.setPhoneId(phoneId);
                 }
                 userFilter.setUserRole(userRole);
                 userFilter.setUserState(userState);
                 userList = userService.getUserListByCondition(userFilter);
                 WeList.addList(userList);
-            }else {
+            } else {
                 userList = userService.getAllUser();
                 WeList.addList(userList);
             }

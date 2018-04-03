@@ -63,10 +63,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserState(User user) {
-        if(user==null) return false;
-        try{
-            if(userMapper.updateUserstate(user)==1) return true;
-        }catch (Error e){
+        if (user == null) return false;
+        try {
+            if (userMapper.updateUserstate(user) == 1) return true;
+        } catch (Error e) {
             logger.error("用户登陆service层修改用户状态异常", e);
         }
         return false;
@@ -79,11 +79,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAllUser() {
-        List<User> userList=new ArrayList<>();
-        try{
-            userList=userMapper.getALLUser();
+        List<User> userList = new ArrayList<>();
+        try {
+            userList = userMapper.getALLUser();
 
-        }catch (Error e){
+        } catch (Error e) {
             logger.error("查看用户service层异常", e);
         }
         return userList;
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         if (id == null) return null;
         try {
             /*List<User> us =null;*/
-            List<User> us= userMapper.getUserById(id);
+            List<User> us = userMapper.getUserById(id);
             if (us == null || us.size() != 1) return null;
             else return us.get(0);
         } catch (Throwable e) {
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         if (phoneId == null) return null;
         try {
             /*List<User> us =null;*/
-            List<User> us= userMapper.getUserByPhoneId(phoneId);
+            List<User> us = userMapper.getUserByPhoneId(phoneId);
             if (us == null || us.size() != 1) return null;
             else return us.get(0);
         } catch (Throwable e) {
@@ -126,11 +126,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserYnById(User user) {
-        if(user==null) return false;
-        try{
-            Integer result=userMapper.updateUserYnById(user);
-            if(result==1) return true;
-        }catch(Throwable e){
+        if (user == null) return false;
+        try {
+            Integer result = userMapper.updateUserYnById(user);
+            if (result == 1) return true;
+        } catch (Throwable e) {
             logger.error("停用用户信息时service层异常", e);
         }
         return false;
@@ -138,11 +138,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
-        if(user==null) return false;
-        try{
-            Integer result=userMapper.updateUser(user);
-            if(result==1) return true;
-        }catch(Throwable e){
+        if (user == null) return false;
+        try {
+            Integer result = userMapper.updateUser(user);
+            if (result == 1) return true;
+        } catch (Throwable e) {
             logger.error("停用用户信息时service层异常", e);
         }
         return false;
@@ -150,16 +150,17 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据条件搜索符合条件的用户
+     *
      * @param user
      * @return
      */
     @Override
     public List<User> getUserListByCondition(User user) {
-        List<User> userList=new ArrayList<>();
-        try{
-            userList=userMapper.getUserListByCondition(user);
+        List<User> userList = new ArrayList<>();
+        try {
+            userList = userMapper.getUserListByCondition(user);
 
-        }catch (Throwable e){
+        } catch (Throwable e) {
             logger.error("搜索用户service层异常", e);
         }
         return userList;

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/skin/bootstrap.min.css" type="text/css"/>
     <style type="text/css">
         body {
-            background: url("../../img/1.jpg");
+            background: url("../../img/7.jpg");
             animation-name: myfirst;
             animation-duration: 12s;
             /*变换时间*/
@@ -19,16 +19,16 @@
 
         @keyframes myfirst {
             0% {
-                background: url("../../img/1.jpg");
+                background: url("../../img/7.jpg");
             }
             34% {
-                background: url("../../img/2.jpg");
+                background: url("../../img/8.jpg");
             }
             67% {
-                background: url("../../img/3.jpg");
+                background: url("../../img/9.jpg");
             }
             100% {
-                background: url("../../img/1.jpg");
+                background: url("../../img/7.jpg");
             }
         }
 
