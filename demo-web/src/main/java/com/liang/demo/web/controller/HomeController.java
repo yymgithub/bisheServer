@@ -2,9 +2,11 @@ package com.liang.demo.web.controller;
 
 import com.liang.demo.dao.PSBenchMapper;
 import com.liang.demo.dao.PsDeviceAlarmMapper;
+import com.liang.demo.dao.PsParameterMapper;
 import com.liang.demo.domain.*;
 import com.liang.demo.service.PsBenchService;
 import com.liang.demo.service.PsCommandService;
+import com.liang.demo.service.PsDriveService;
 import com.liang.demo.service.PsParameterService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +36,10 @@ public class HomeController {
     private PsDeviceAlarmMapper psDeviceAlarmMapper;
     @Resource
     private PSBenchMapper psBenchMapper;
+    @Resource
+    private PsDriveService psDriveService;
+    @Resource
+    private PsParameterMapper psParameterMapper;
     public static final Logger logger = LogManager.getLogger(HomeController.class);
 
 
@@ -258,5 +264,68 @@ public class HomeController {
         }
         return result;
     }
+
+    @RequestMapping("/manc/drive")
+    @ResponseBody
+    public Result drive_setting(Integer psId, String phoneId,Integer drMode,double drLoad,Integer drRamptime,Integer drReverse,Integer drRemotestatus){
+        Result result=new Result();
+        if(psId==null||phoneId==null||drMode==null|drRamptime==null||drRemotestatus==null||drReverse==null){
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsDrive psDrive=new PsDrive();
+            psDrive.setPsId(psId);
+            psDrive.setPhoneId(phoneId);
+            psDrive.setDrMode(drMode);
+            psDrive.setDrLoad(drLoad);
+            psDrive.setDrRamptime(drRamptime);
+            psDrive.setDrReverse(drReverse);
+            psDrive.setDrRemotestatus(drRemotestatus);
+            if(psDriveService.insertPsDrive(psDrive)){
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("驱动模式",drMode);
+                map.put("驱动斜坡时间",drRamptime);
+                map.put("驱动转速",drLoad);
+                map.put("驱动是否反转",drReverse);
+                map.put("驱动是否远程",drRemotestatus);
+                List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                   for(int i=0;i<psParameterList.size();i++){
+                       if(entry.getKey().equals(psParameterList.get(i).getParaName())){
+                           psParameterList.get(i).setParaValue(Double.valueOf(String.valueOf(entry.getValue())));
+                           Integer res=psParameterMapper.updatePsParameterByParaId(psParameterList.get(i));
+                           if(res!=1){
+                               result.setSuccess(false);
+                               result.setCode(3);
+                               result.setMessage("进行驱动电机给定Controller层出错");
+                               return result;
+                           }
+
+                       }
+                   }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("手动控制驱动电机设置成功");
+
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("进行驱动电机给定Controller层出错");
+            }
+        }catch (Throwable e){
+            logger.error("进行驱动电机给定Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("进行驱动电机给定Controller层出错");
+
+        }
+        return result;
+
+    }
+
 
 }
