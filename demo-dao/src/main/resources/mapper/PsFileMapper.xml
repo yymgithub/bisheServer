@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsFileMapper">
+
+
+    <resultMap id="psFileResultMap" type="com.liang.demo.domain.PsFile" autoMapping="false">
+        <id property="fileId" column="file_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="fileState" column="file_state" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="fileTestType" column="file_test_type" javaType="String" jdbcType="VARCHAR"/>
+        <result property="fileName" column="file_name" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertPsFile" parameterType="com.liang.demo.domain.PsFile">
+        INSERT PS_FILE (ps_id,file_name,file_test_type,yn,created,file_state)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="fileName != null">
+            #{fileName},
+        </if>
+        <if test="fileTestType != null">
+            #{fileTestType},
+        </if>
+        1,now(),0
+        )
+    </insert>
+
+    <select id="getPsFileByPsIdAndState" parameterType="com.liang.demo.domain.PsFile"
+            resultMap="psFileResultMap">
+        SELECT ps_id,file_name,file_test_type,yn,created,file_state FROM PS_FILE
+        <where>
+            <if test="psId!= null">
+                ps_id=#{psId}
+            </if>
+               AND file_state=0
+        </where>
+    </select>
+
+</mapper>

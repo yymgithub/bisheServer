@@ -4,10 +4,7 @@ import com.liang.demo.dao.PSBenchMapper;
 import com.liang.demo.dao.PsDeviceAlarmMapper;
 import com.liang.demo.dao.PsParameterMapper;
 import com.liang.demo.domain.*;
-import com.liang.demo.service.PsBenchService;
-import com.liang.demo.service.PsCommandService;
-import com.liang.demo.service.PsDriveService;
-import com.liang.demo.service.PsParameterService;
+import com.liang.demo.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -40,6 +37,18 @@ public class HomeController {
     private PsDriveService psDriveService;
     @Resource
     private PsParameterMapper psParameterMapper;
+    @Resource
+    private PsLoadService psLoadService;
+    @Resource
+    private PsTempService psTempService;
+    @Resource
+    private PsFaultService psFaultService;
+    @Resource
+    private PsGearService psGearService;
+    @Resource
+    private PsDataFileService psDataFileService;
+    @Resource
+    private PsFileService psFileService;
     public static final Logger logger = LogManager.getLogger(HomeController.class);
 
 
@@ -326,6 +335,439 @@ public class HomeController {
         return result;
 
     }
+@RequestMapping("/manc/load")
+@ResponseBody
+    public Result load_setting(Integer psId, String phoneId,Integer loMode,Integer loRamptime,double lo1Speed,Integer lo1Reverse,Integer lo1Remote,double lo2Speed,Integer lo2Reverse,Integer lo2Remote){
+        Result result=new Result();
+        if(psId==null||phoneId==null||loMode==null|loRamptime==null||lo1Reverse==null||lo1Remote==null||lo2Reverse==null||lo2Remote==null){
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsLoad psLoad=new PsLoad();
+            psLoad.setPsId(psId);
+            psLoad.setPhoneId(phoneId);
+            psLoad.setLoMode(loMode);
+            psLoad.setLoRamptime(loRamptime);
+            psLoad.setLo1Speed(lo1Speed);
+            psLoad.setLo1Reverse(lo1Reverse);
+            psLoad.setLo1Remote(lo1Remote);
+            psLoad.setLo2Speed(lo2Speed);
+            psLoad.setLo2Reverse(lo2Reverse);
+            psLoad.setLo2Remote(lo2Remote);
+            if(psLoadService.insertPsload(psLoad)){
+                Map<String,Object> map=new HashMap<String, Object>();
+                map.put("负载模式",loMode);
+                map.put("负载斜坡时间",loRamptime);
+                map.put("负载1转速",lo1Speed);
+                map.put("负载1是否反转",lo1Reverse);
+                map.put("负载1是否远程",lo1Remote);
+                map.put("负载2转速",lo2Speed);
+                map.put("负载2是否反转",lo2Reverse);
+                map.put("负载2是否远程",lo2Remote);
+                List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    for(int i=0;i<psParameterList.size();i++){
+                        if(entry.getKey().equals(psParameterList.get(i).getParaName())){
+                            psParameterList.get(i).setParaValue(Double.valueOf(String.valueOf(entry.getValue())));
+                            Integer res=psParameterMapper.updatePsParameterByParaId(psParameterList.get(i));
+                            if(res!=1){
+                                result.setSuccess(false);
+                                result.setCode(3);
+                                result.setMessage("进行负载电机给定Controller层出错");
+                                return result;
+                            }
+
+                        }
+                    }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("手动控制负载电机设置成功");
+
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("进行负载电机给定Controller层出错");
+            }
+        }catch(Throwable e){
+            logger.error("进行负载电机给定Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("进行负载电机给定Controller层出错");
+        }
+
+
+        return result;
+    }
+@RequestMapping("/manc/getTemp")
+@ResponseBody
+  public Result getNowTemp(Integer psId){
+      Result result=new Result();
+      if(psId==null) {
+          result.setSuccess(false);
+          result.setCode(3);
+          result.setMessage("参数传入Controller层异常");
+      }
+      try{
+          Map<String, Object> map = new HashMap<String, Object>();
+          List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+          List<PsParameter> getNowTempList=new ArrayList<>();
+          for(int i=0;i<psParameterList.size();i++){
+              if(psParameterList.get(i).getParaName().equals("油温")||psParameterList.get(i).getParaName().equals("变速箱温度")){
+                  getNowTempList.add(psParameterList.get(i));
+              }
+          }
+          result.setSuccess(true);
+          result.setCode(1);
+          result.setMessage("手动控制负载电机设置成功");
+          map.put("getNowTempList",getNowTempList);
+          result.setData(map);
+
+      }catch (Throwable e){
+          logger.error("获取当前温度时Controller层出错");
+          result.setSuccess(false);
+          result.setCode(3);
+          result.setMessage("获取当前温度时Controller层出错");
+      }
+      return result;
+
+  }
+
+    @RequestMapping("/manc/setTemp")
+    @ResponseBody
+    public Result setTemp(Integer psId,double paraValue,String phoneId){
+        Result result=new Result();
+        if(psId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsTemp psTemp=new PsTemp();
+            psTemp.setPhoneId(phoneId);
+            psTemp.setPsId(psId);
+            psTemp.setTeName("变速箱目标温度");
+            psTemp.setTeValue(paraValue);
+            if(psTempService.insertPsTemp(psTemp)){
+                List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+                for(int i=0;i<psParameterList.size();i++){
+                    if(psParameterList.get(i).getParaName().equals("变速箱温度")){
+                        psParameterList.get(i).setParaValue(paraValue);
+                        Integer res=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        if(res!=1){
+                            result.setSuccess(false);
+                            result.setCode(3);
+                            result.setMessage("设置变速箱温度时Controller层出错");
+                        }
+                    }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("手动控制温度控制变速箱温度设置成功");
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("设置变速箱温度时Controller层出错");
+            }
+
+
+        }catch (Throwable e){
+            logger.error("设置变速箱温度时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("设置变速箱温度时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/manc/setTemp1")
+    @ResponseBody
+    public Result setTemp1(Integer psId,double paraValue,String phoneId){
+        Result result=new Result();
+        if(psId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsTemp psTemp=new PsTemp();
+            psTemp.setPhoneId(phoneId);
+            psTemp.setPsId(psId);
+            psTemp.setTeName("油温");
+            psTemp.setTeValue(paraValue);
+            if(psTempService.insertPsTemp(psTemp)) {
+                List<PsParameter> psParameterList = psParameterMapper.getPsParameterByPsId(psId);
+                for (int i = 0; i < psParameterList.size(); i++) {
+                    if (psParameterList.get(i).getParaName().equals("油温")) {
+                        psParameterList.get(i).setParaValue(paraValue);
+                        Integer res = psParameterMapper.updatePsParameterByParaId(psParameterList.get(i));
+                        if (res != 1) {
+                            result.setSuccess(false);
+                            result.setCode(3);
+                            result.setMessage("设置油温时Controller层出错");
+                        }
+                    }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("手动控制温度控制油温设置成功");
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("设置油温时Controller层出错");
+            }
+        }catch (Throwable e){
+            logger.error("设置油温时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("设置油温时Controller层出错");
+        }
+        return result;
+
+    }
+
+
+    @RequestMapping("/manc/getGear")
+    @ResponseBody
+    public Result getNowGear(Integer psId){
+        Result result=new Result();
+        if(psId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+            List<PsParameter> getNowGearList=new ArrayList<>();
+            for(int i=0;i<psParameterList.size();i++){
+                if(psParameterList.get(i).getParaName().equals("故障状态")||psParameterList.get(i).getParaName().equals("当前档位")){
+                    getNowGearList.add(psParameterList.get(i));
+                }
+            }
+            result.setSuccess(true);
+            result.setCode(1);
+            result.setMessage("手动控制档位初始数据获取成功成功");
+            map.put("getNowGearList",getNowGearList);
+            result.setData(map);
+
+        }catch (Throwable e){
+            logger.error("获取当前档位时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取当前档位时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/manc/setGear")
+    @ResponseBody
+    public Result setGear(Integer psId,String gearName,String phoneId){
+        Result result=new Result();
+        if(psId==null||gearName==null||phoneId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+           PsGear psGear=new PsGear();
+            psGear.setPsId(psId);
+            psGear.setGearName(gearName);
+            psGear.setPhoneId(phoneId);
+            if(psGearService.insertPsGear(psGear)){
+                List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+                for(int i=0;i<psParameterList.size();i++){
+                    if(psParameterList.get(i).getParaName().equals("当前档位")){
+                        Integer change=0;
+                        if(gearName.equals("1档")){
+                            change=0;
+                        }
+                        else if(gearName.equals("2档")){
+                            change=1;
+                        }
+                        else if(gearName.equals("3档")){
+                            change=2;
+                        }
+                        else if(gearName.equals("4档")){
+                            change=3;
+                        }
+                        else if(gearName.equals("5档")){
+                            change=4;
+                        }
+                        else if(gearName.equals("6档")){
+                            change=5;
+                        }
+                        psParameterList.get(i).setParaValue(change);
+                        Integer res=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        if(res!=1){
+                            result.setSuccess(false);
+                            result.setCode(3);
+                            result.setMessage("设置档位变化时Controller层出错");
+                        }
+                    }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("设置档位变化设置成功");
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("设置档位变化时Controller层出错");
+            }
+
+
+        }catch (Throwable e){
+            logger.error("设置档位变化时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("设置档位变化时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/manc/setFault")
+    @ResponseBody
+    public Result setFault(Integer psId,String faultName,String phoneId){
+        Result result=new Result();
+        if(psId==null||faultName==null||phoneId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsFault psFault=new PsFault();
+            psFault.setPhoneId(phoneId);
+            psFault.setPsId(psId);
+            psFault.setFaultName(faultName);
+            if(psFaultService.insertPsFault(psFault)){
+                List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+                for(int i=0;i<psParameterList.size();i++){
+                    if(psParameterList.get(i).getParaName().equals("故障状态")){
+                        Integer change=0;
+                        if(faultName.equals("变为故障")){
+                            change=1;
+                        }
+                        else if(faultName.equals("变为非故障")){
+                            change=0;
+                        }
+                        psParameterList.get(i).setParaValue(change);
+                        Integer res=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        if(res!=1){
+                            result.setSuccess(false);
+                            result.setCode(3);
+                            result.setMessage("故障变化时Controller层出错");
+                        }
+                    }
+                }
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("故障变化设置成功");
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("故障变化时Controller层出错");
+            }
+
+
+        }catch (Throwable e){
+            logger.error("故障变化时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("故障变化时Controller层出错");
+        }
+        return result;
+
+    }
+    @RequestMapping("/program/setFile")
+    @ResponseBody
+    public Result setFile(Integer psId,String phoneId,String daTestSubject,String daDataDocu,String testType,Integer testNum,String daNote,String testStaff){
+        Result result=new Result();
+        if(psId==null||daTestSubject==null||phoneId==null||daDataDocu==null||testType==null||testNum==null||daNote==null||testStaff==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+           PsFile psFile=new PsFile();
+            psFile.setFileName(daDataDocu);
+            psFile.setPsId(psId);
+            psFile.setFileTestType(daTestSubject);
+           PsDataFile psDataFile=new PsDataFile();
+            psDataFile.setPsId(psId);
+            psDataFile.setPhoneId(phoneId);
+            psDataFile.setDaTestSubject(daTestSubject);
+            psDataFile.setDaDataDocu(daDataDocu);
+            psDataFile.setDaNote(daNote);
+            psDataFile.setTestNum(testNum);
+            psDataFile.setTestStaff(testStaff);
+            psDataFile.setTestType(testType);
+            if(psFileService.insertPsFile(psFile)==true&&psDataFileService.insertPsDataFile(psDataFile)==true){
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("新建数据文件设置成功");
+            }
+            else{
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("新建数据文件时Controller层出错");
+            }
+
+
+        }catch (Throwable e){
+            logger.error("新建数据文件时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("新建数据文件时Controller层出错");
+        }
+        return result;
+
+    }
+
+
+    @RequestMapping("/program/getFile")
+    @ResponseBody
+    public Result getFile(Integer psId){
+        Result result=new Result();
+        if(psId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            List<PsFile> psFileList=psFileService.getPsFileByPsIdAndState(psId);
+            if(psFileList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("选择文件初始数据时Controller层出错");
+            }
+            else{
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("psFileList",psFileList);
+                result.setData(map);
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("选择文件初始数据设置成功");
+            }
+        }catch (Throwable e){
+            logger.error("选择文件初始数据时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("选择文件初始数据时Controller层出错");
+        }
+        return result;
+
+    }
+
 
 
 }

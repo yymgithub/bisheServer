@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsLoadMapper">
+
+
+    <resultMap id="psLoadResultMap" type="com.liang.demo.domain.PsLoad" autoMapping="false">
+        <id property="loId" column="lo_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="loMode" column="lo_mode" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="loRamptime" column="lo_ramptime" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="lo1Speed" column="lo1_speed" javaType="double" jdbcType="DOUBLE"/>
+        <result property="lo1Reverse" column="lo1_reverse" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="lo1Remote" column="lo1_remote" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="lo2Speed" column="lo2_speed" javaType="double" jdbcType="DOUBLE"/>
+        <result property="lo2Reverse" column="lo2_reverse" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="lo2Remote" column="lo2_remote" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="phoneId" column="phone_id" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertPsload" parameterType="com.liang.demo.domain.PsLoad">
+        INSERT PS_LOAD (ps_id,lo_mode,lo_ramptime,lo1_speed,lo1_reverse,lo1_remote,lo2_speed,lo2_reverse,lo2_remote,phone_id,yn,created)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="loMode != null">
+            #{loMode},
+        </if>
+        <if test="loRamptime != null">
+            #{loRamptime},
+        </if>
+        <if test="lo1Speed != null">
+            #{lo1Speed},
+        </if>
+        <if test="lo1Reverse != null">
+            #{lo1Reverse},
+        </if>
+        <if test="lo1Remote != null">
+            #{lo1Remote},
+        </if>
+        <if test="lo2Speed != null">
+            #{lo2Speed},
+        </if>
+        <if test="lo2Reverse != null">
+            #{lo2Reverse},
+        </if>
+        <if test="lo2Remote != null">
+            #{lo2Remote},
+        </if>
+        <if test="phoneId != null">
+            #{phoneId},
+        </if>
+        1,now()
+        )
+    </insert>
+
+</mapper>
