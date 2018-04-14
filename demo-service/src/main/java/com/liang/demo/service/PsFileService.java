@@ -22,4 +22,11 @@ public interface PsFileService {
      */
     List<PsFile> getPsFileByPsIdAndState(Integer psId);
 
+    /**
+     * 根据文件执行状态更新文件状态
+     * @param psFile
+     * @return
+     */
+    boolean updatePsFileFileStateByFileId(PsFile psFile);
+
 }

@@ -24,4 +24,12 @@ public interface PsFileMapper {
      * @return
      */
     List<PsFile> getPsFileByPsIdAndState(@Param("psId") Integer psId);
+
+    /**
+     * 根据文件执行状态更新文件状态
+     * @param psFile
+     * @return
+     */
+    Integer updatePsFileFileStateByFileId(PsFile psFile);
+
 }

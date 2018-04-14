@@ -3,6 +3,8 @@ package com.liang.demo.dao;
 import com.liang.demo.domain.PsDeviceAlarm;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by 永远有多远 on 2018/4/3.
  */
@@ -14,4 +16,11 @@ public interface PsDeviceAlarmMapper {
      * @return
      */
     Integer insertPsDeviceAlarm(PsDeviceAlarm psDeviceAlarm);
+
+    /**
+     * 获取所有设备报警状态
+     * @return
+     */
+
+    List<PsDeviceAlarm>  getAllDeviceAlarm();
 }

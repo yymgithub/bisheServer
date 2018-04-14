@@ -56,4 +56,22 @@ public class PsFileServiceImpl implements PsFileService {
         }
         return null;
     }
+
+    /**
+     * 根据文件执行状态更新文件状态
+     *
+     * @param psFile
+     * @return
+     */
+    @Override
+    public boolean updatePsFileFileStateByFileId(PsFile psFile) {
+        if(psFile==null) return false;
+        try{
+            if(psFileMapper.updatePsFileFileStateByFileId(psFile)==1)
+                return true;
+        }catch(Throwable e){
+            logger.error("更新文件状态时service层异常", e);
+        }
+        return false;
+    }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsDeviceMapper">
+
+
+    <resultMap id="psDeviceResultMap" type="com.liang.demo.domain.PsDevice" autoMapping="false">
+        <id property="deId" column="de_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psDevName" column="ps_devname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="psDevState" column="ps_devstate" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psLastRecvtime" column="ps_lastrecvtime" jdbcType="TIMESTAMP"/>
+        <result property="psLineNum" column="ps_line_num" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectDevice" parameterType="java.lang.Integer"
+            resultMap="psDeviceResultMap">
+        SELECT de_id,ps_id,ps_devname,ps_devstate,ps_lastrecvtime,yn,ps_line_num FROM PS_DEVICE
+        <where>
+            <if test="psId!= null">
+                ps_id=#{psId}
+            </if>
+        </where>
+    </select>
+    <update id="updatePsDevice">
+        update PS_DEVICE
+        <set>
+            ps_devstate=#{psDevState},ps_lastrecvtime=now(),ps_line_num=#{psLineNum}
+        </set>
+        WHERE
+        <if test="psId!= null">
+            ps_id=#{psId}
+        </if>
+    </update>
+
+    <select id="selectDeviceList" parameterType="com.liang.demo.domain.PsDevice"
+            resultMap="psDeviceResultMap">
+        SELECT * FROM PS_DEVICE
+    </select>
+
+</mapper>

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 永远有多远 on 2018/4/3.
@@ -34,6 +36,23 @@ public class PsDeviceAlarmServiceImpl implements PsDeviceAlarmService {
 
         }catch (Throwable e){
             logger.error("向设备报警表插入数据时Service层报错",e);
+        }
+        return null;
+    }
+
+    /**
+     * 获得所有报警设备
+     *
+     * @return
+     */
+    @Override
+    public List<PsDeviceAlarm> getAllDeviceAlarm() {
+        List<PsDeviceAlarm> psDeviceAlarmList = new ArrayList<>();
+        try {
+            psDeviceAlarmList = psDeviceAlarmMapper.getAllDeviceAlarm();
+            return psDeviceAlarmList;
+        } catch (Error e) {
+            logger.error("获取设备报警记态时service层异常", e);
         }
         return null;
     }

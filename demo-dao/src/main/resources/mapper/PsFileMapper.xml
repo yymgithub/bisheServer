@@ -35,13 +35,24 @@
 
     <select id="getPsFileByPsIdAndState" parameterType="com.liang.demo.domain.PsFile"
             resultMap="psFileResultMap">
-        SELECT ps_id,file_name,file_test_type,yn,created,file_state FROM PS_FILE
+        SELECT file_id,ps_id,file_name,file_test_type,yn,created,file_state FROM PS_FILE
         <where>
             <if test="psId!= null">
                 ps_id=#{psId}
             </if>
-               AND file_state=0
+               AND file_state!=3
         </where>
     </select>
+
+    <update id="updatePsFileFileStateByFileId">
+        update PS_FILE
+        <set>
+            file_state=#{fileState}
+        </set>
+        WHERE
+        <if test="fileId!= null">
+            file_id=#{fileId}
+        </if>
+    </update>
 
 </mapper>

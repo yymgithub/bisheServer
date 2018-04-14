@@ -7,7 +7,7 @@
 <mapper namespace="com.liang.demo.dao.PsDeviceAlarmMapper">
 
 
-    <resultMap id="psDeviceAlarmResultMap" type="com.liang.demo.domain.PsCommand" autoMapping="false">
+    <resultMap id="psDeviceAlarmResultMap" type="com.liang.demo.domain.PsDeviceAlarm" autoMapping="false">
         <id property="alarmId" column="alarm_id" javaType="Integer" jdbcType="INTEGER"/>
         <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
         <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
@@ -28,4 +28,9 @@
 
         )
     </insert>
+
+    <select id="getAllDeviceAlarm" parameterType="com.liang.demo.domain.PsDeviceAlarm"
+            resultMap="psDeviceAlarmResultMap">
+        SELECT * FROM PS_DEVICEALARM
+    </select>
 </mapper>

@@ -2,6 +2,8 @@ package com.liang.demo.service;
 
 import com.liang.demo.domain.PsDeviceAlarm;
 
+import java.util.List;
+
 /**
  * Created by 永远有多远 on 2018/4/3.
  */
@@ -12,4 +14,10 @@ public interface PsDeviceAlarmService {
      * @return
      */
     Integer insertPsDeviceAlarm(PsDeviceAlarm psDeviceAlarm);
+
+    /**
+     * 获得所有报警设备
+     * @return
+     */
+    List<PsDeviceAlarm> getAllDeviceAlarm();
 }

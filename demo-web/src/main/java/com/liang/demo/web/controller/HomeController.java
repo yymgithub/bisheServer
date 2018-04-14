@@ -49,6 +49,10 @@ public class HomeController {
     private PsDataFileService psDataFileService;
     @Resource
     private PsFileService psFileService;
+    @Resource
+    private PsDeviceService psDeviceService;
+    @Resource
+    private PsDeviceAlarmService psDeviceAlarmService;
     public static final Logger logger = LogManager.getLogger(HomeController.class);
 
 
@@ -75,7 +79,14 @@ public class HomeController {
         try {
             psParameterList = psParameterService.getPsParameterByPsId(psId);
             PsBench psBench = psBenchService.selectPsBenchByPsId(psId);
-            if (psParameterList != null) {
+
+            //更新设备状态
+            PsDevice psDevice=psDeviceService.selectDevice(psId);
+            psDevice.setPsId(psId);
+            psDevice.setPsDevState(1);
+            psDevice.setPsLineNum(psDevice.getPsLineNum()+1);
+            boolean res=psDeviceService.updatePsDevice(psDevice);
+            if (psParameterList != null&&res) {
                 result.setSuccess(true);
                 result.setCode(1);
                 result.setMessage("获取成功");
@@ -763,6 +774,144 @@ public class HomeController {
             result.setSuccess(false);
             result.setCode(3);
             result.setMessage("选择文件初始数据时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/program/upateFileState")
+    @ResponseBody
+    public Result upateFileState(Integer fileId,Integer fileState){
+        Result result=new Result();
+        if(fileId==null||fileState==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+           PsFile psFile=new PsFile();
+            psFile.setFileId(fileId);
+            psFile.setFileState(fileState);
+            if(!psFileService.updatePsFileFileStateByFileId(psFile)){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("更改文件状态时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("更改文件状态设置成功");
+            }
+        }catch (Throwable e){
+            logger.error("更改文件状态时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("更改文件状态时Controller层出错");
+        }
+        return result;
+
+    }
+
+
+    @RequestMapping("/signoutDevice")
+    @ResponseBody
+    public Result signoutDevice(Integer psId){
+        Result result=new Result();
+        if(psId==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+            PsDevice psDevice=psDeviceService.selectDevice(psId);
+            if(psDevice.getPsLineNum()==1){
+                psDevice.setPsDevState(0);
+            }
+            else if(psDevice.getPsLineNum()==0){
+                psDevice.setPsLineNum(0);
+                psDevice.setPsDevState(0);
+                psDevice.setPsLineNum(psDevice.getPsLineNum()-1);
+            }
+            else{
+                psDevice.setPsDevState(1);
+                psDevice.setPsLineNum(psDevice.getPsLineNum()-1);
+            }
+            boolean res=psDeviceService.updatePsDevice(psDevice);
+            if(!res){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("退出登录更改设备状态时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("退出登录更改设备状态设置成功");
+            }
+        }catch (Throwable e){
+            logger.error("退出登录更改设备状态时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("退出登录更改设备状态时Controller层出错");
+        }
+        return result;
+
+    }
+
+
+
+    @RequestMapping("/program/getDevice")
+    @ResponseBody
+    public Result getDevice(){
+        Result result=new Result();
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsDevice> psDeviceList=psDeviceService.selectDeviceList();
+            if(psDeviceList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("获取所有设备状态时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("获取所有设备状态设置成功");
+                map.put("psDeviceList",psDeviceList);
+                result.setData(map);
+            }
+        }catch (Throwable e){
+            logger.error("获取所有设备状态时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取所有设备状态时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/more/getAlarmDevice")
+    @ResponseBody
+    public Result getAlarmDevice(){
+        Result result=new Result();
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsDeviceAlarm> psDeviceAlarmList=psDeviceAlarmService.getAllDeviceAlarm();
+            if(psDeviceAlarmList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("获取所有设备报警状态时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("获取所有设备报警状态设置成功");
+                map.put("psDeviceAlarmList",psDeviceAlarmList);
+                result.setData(map);
+            }
+        }catch (Throwable e){
+            logger.error("获取所有设备报警状态时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取所有设备报警状态时Controller层出错");
         }
         return result;
 
