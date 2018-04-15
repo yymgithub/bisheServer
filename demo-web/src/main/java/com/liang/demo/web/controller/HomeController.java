@@ -53,6 +53,10 @@ public class HomeController {
     private PsDeviceService psDeviceService;
     @Resource
     private PsDeviceAlarmService psDeviceAlarmService;
+    @Resource
+    private PsLogService psLogService;
+    @Resource
+    private PsTestRecordService psTestRecordService;
     public static final Logger logger = LogManager.getLogger(HomeController.class);
 
 
@@ -912,6 +916,105 @@ public class HomeController {
             result.setSuccess(false);
             result.setCode(3);
             result.setMessage("获取所有设备报警状态时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/more/setTestRecord")
+    @ResponseBody
+    public Result setTestRecord(Integer psId,String testPara){
+        Result result=new Result();
+        if(psId==null||testPara==null) {
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("参数传入Controller层异常");
+        }
+        try{
+           PsTestRecord psTestRecord=new PsTestRecord();
+            psTestRecord.setPsId(psId);
+            psTestRecord.setTestPara(testPara);
+            if(!psTestRecordService.insertPsTestRecord(psTestRecord)){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("插入试验记录时Controller层出错");
+                PsLog psLog=new PsLog();
+                psLog.setPsId(psId);
+                psLog.setLogErrorMsg("插入试验记录Controller层出错");
+                psLogService.insertPsLog(psLog);
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("插入试验记录设置成功");
+            }
+        }catch (Throwable e){
+            logger.error("插入试验记录Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("插入试验记录Controller层出错");
+            PsLog psLog=new PsLog();
+            psLog.setPsId(psId);
+            psLog.setLogErrorMsg("插入试验记录Controller层出错");
+            psLogService.insertPsLog(psLog);
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/more/getTestRecord")
+    @ResponseBody
+    public Result getTestRecord(){
+        Result result=new Result();
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsTestRecord> psTestRecordList=psTestRecordService.getAllTestRecord();
+            if(psTestRecordList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("获取所有试验记录时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("获取所有试验记录成功");
+                map.put("psTestRecordList",psTestRecordList);
+                result.setData(map);
+            }
+        }catch (Throwable e){
+            logger.error("获取所有试验记录时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取所有试验记录时Controller层出错");
+        }
+        return result;
+
+    }
+
+    @RequestMapping("/more/getLog")
+    @ResponseBody
+    public Result getLog(){
+        Result result=new Result();
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsLog> psLogList=psLogService.getAllLog();
+            if(psLogList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("获取所有系统日志时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("获取所有系统日志成功");
+                map.put("psLogList",psLogList);
+                result.setData(map);
+            }
+        }catch (Throwable e){
+            logger.error("获取所有系统日志时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取所有系统日志时Controller层出错");
         }
         return result;
 

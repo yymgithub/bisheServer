@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsTestRecordMapper">
+
+
+    <resultMap id="psTestRecordResultMap" type="com.liang.demo.domain.PsTestRecord" autoMapping="false">
+        <id property="testId" column="test_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="testPara" column="test_para" javaType="String" jdbcType="VARCHAR"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertPsTestRecord" parameterType="com.liang.demo.domain.PsTestRecord">
+        INSERT PS_TESTRECORD (ps_id,test_para,yn,created)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="testPara != null">
+            #{testPara},
+        </if>
+        1,now()
+        )
+    </insert>
+    <select id="getAllTestRecord" parameterType="com.liang.demo.domain.PsTestRecord"
+            resultMap="psTestRecordResultMap">
+        SELECT * FROM PS_TESTRECORD
+    </select>
+
+</mapper>

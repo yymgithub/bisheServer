@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsLogMapper">
+
+
+    <resultMap id="psLogResultMap" type="com.liang.demo.domain.PsLog" autoMapping="false">
+        <id property="logId" column="log_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="logErrorMsg" column="log_errormsg" javaType="String" jdbcType="VARCHAR"/>
+        <result property="logTime" column="log_time" jdbcType="TIMESTAMP"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertPsLog" parameterType="com.liang.demo.domain.PsLog">
+        INSERT PS_LOG (ps_id,log_errormsg,yn,log_time)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="logErrorMsg != null">
+            #{logErrorMsg},
+        </if>
+        1,now()
+        )
+    </insert>
+    <select id="getAllLog" parameterType="com.liang.demo.domain.PsLog"
+            resultMap="psLogResultMap">
+        SELECT * FROM PS_LOG
+    </select>
+
+</mapper>
