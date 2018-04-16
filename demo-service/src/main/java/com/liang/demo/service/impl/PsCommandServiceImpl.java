@@ -94,10 +94,20 @@ public class PsCommandServiceImpl implements PsCommandService {
             else{
                 Integer num=psParameterList.size();
                 for(int i=0;i<num;i++){
-                    psParameterList.get(i).setParaValue(Math.random()*1500);
-                    Integer result=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
-                    if(result!=1) return false;
-                }
+                    String str=psParameterList.get(i).getParaName();
+                    if(str.equals("驱动模式")||str.equals("驱动是否反转")||str.equals("驱动是否远程")||str.equals("负载2是否反转")||str.equals("负载1是否远程")||str.equals("负载1是否反转")||str.equals("当前档位")||str.equals("负载2是否远程")||str.equals("故障状态")){
+                        psParameterList.get(i).setParaValue(0);
+                        Integer result=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        if(result!=1) return false;
+                    }
+                    else{
+                        psParameterList.get(i).setParaValue(Math.random()*1500);
+                        Integer result=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        if(result!=1) return false;
+
+                    }
+                    }
+
                 PsBench psBench=new PsBench();
                 psBench.setPsId(psId);
                 psBench.setPsStop(0);
@@ -106,7 +116,7 @@ public class PsCommandServiceImpl implements PsCommandService {
                 return true;
             }
         }catch (Throwable e){
-            logger.error("命令控制停车改动参数表所有参数为0时Service层出错");
+            logger.error("命令控制启动变频器时Service层出错");
         }
 
         return false;
