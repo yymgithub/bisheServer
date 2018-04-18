@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.liang.demo.dao.PsChartMapper">
+
+
+    <resultMap id="psChartResultMap" type="com.liang.demo.domain.PsChart" autoMapping="false">
+        <id property="chartId" column="chart_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="psId" column="ps_id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="driveChart" column="drive_chart" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="tmpChart" column="tmp_chart" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="yn" column="yn" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getPsChartByPsId" parameterType="java.lang.Integer"
+            resultMap="psChartResultMap">
+        SELECT  chart_id,ps_id,drive_chart,tmp_chart,yn,created FROM PS_CHART
+        <where>
+            <if test="psId!= null">
+                ps_id=#{psId}
+            </if>
+        </where>
+        ORDER BY created DESC  LIMIT 0, 13
+    </select>
+    <insert id="insertPsChart" parameterType="com.liang.demo.domain.PsChart">
+        INSERT PS_CHART (ps_id,drive_chart,tmp_chart,yn,created)
+        VALUES (
+        <if test="psId != null">
+            #{psId},
+        </if>
+        <if test="driveChart != null">
+            #{driveChart},
+        </if>
+        <if test="tmpChart != null">
+            #{tmpChart},
+        </if>
+        1,now()
+        )
+    </insert>
+
+</mapper>

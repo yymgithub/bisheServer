@@ -1,9 +1,11 @@
 package com.liang.demo.service.impl;
 
 import com.liang.demo.dao.PSBenchMapper;
+import com.liang.demo.dao.PsChartMapper;
 import com.liang.demo.dao.PsCommandMapper;
 import com.liang.demo.dao.PsParameterMapper;
 import com.liang.demo.domain.PsBench;
+import com.liang.demo.domain.PsChart;
 import com.liang.demo.domain.PsCommand;
 import com.liang.demo.domain.PsParameter;
 import com.liang.demo.service.PsCommandService;
@@ -28,6 +30,8 @@ public class PsCommandServiceImpl implements PsCommandService {
     private PsParameterMapper psParameterMapper;
     @Resource
     private PSBenchMapper psBenchMapper;
+    @Resource
+    private PsChartMapper psChartMapper;
     /**
      * 向PS_COMMAND表中出入命令控制数据
      *
@@ -57,6 +61,8 @@ public class PsCommandServiceImpl implements PsCommandService {
         if(psId==null) return false;
         try{
             psParameterList=psParameterMapper.getPsParameterByPsId(psId);
+            PsChart psChart=new PsChart();
+            psChart.setPsId(psId);
             if(psParameterList==null) return false;
             else{
                 Integer num=psParameterList.size();
@@ -64,12 +70,20 @@ public class PsCommandServiceImpl implements PsCommandService {
                     psParameterList.get(i).setParaValue(0);
                     Integer result=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
                     if(result!=1) return false;
+                    if(psParameterList.get(i).getParaName().equals("驱动转速")){
+                        psChart.setDriveChart(psParameterList.get(i).getParaValue());
+                    }
+                    if(psParameterList.get(i).getParaName().equals("变速箱温度")){
+                        psChart.setTmpChart(psParameterList.get(i).getParaValue());
+                    }
                 }
                 PsBench psBench=new PsBench();
                 psBench.setPsId(psId);
                 psBench.setPsStop(1);
                Integer res3= psBenchMapper.updatePsBenchStop(psBench);
                 if(res3!=1) return false;
+                Integer res4=psChartMapper.insertPsChart(psChart);
+                if(res4!=1) return false;
                 return true;
             }
         }catch (Throwable e){
@@ -89,6 +103,8 @@ public class PsCommandServiceImpl implements PsCommandService {
     public boolean commandStartUp(Integer psId) {
         if(psId==null) return false;
         try{
+            PsChart psChart=new PsChart();
+            psChart.setPsId(psId);
             List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
             if(psParameterList==null) return false;
             else{
@@ -104,6 +120,12 @@ public class PsCommandServiceImpl implements PsCommandService {
                         psParameterList.get(i).setParaValue(Math.random()*1500);
                         Integer result=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
                         if(result!=1) return false;
+                        if(psParameterList.get(i).getParaName().equals("驱动转速")){
+                            psChart.setDriveChart(psParameterList.get(i).getParaValue());
+                        }
+                        if(psParameterList.get(i).getParaName().equals("变速箱温度")){
+                            psChart.setTmpChart(psParameterList.get(i).getParaValue());
+                        }
 
                     }
                     }
@@ -113,6 +135,8 @@ public class PsCommandServiceImpl implements PsCommandService {
                 psBench.setPsStop(0);
                 Integer res3= psBenchMapper.updatePsBenchStop(psBench);
                 if(res3!=1) return false;
+                Integer res4=psChartMapper.insertPsChart(psChart);
+                if(res4!=1) return false;
                 return true;
             }
         }catch (Throwable e){

@@ -57,6 +57,8 @@ public class HomeController {
     private PsLogService psLogService;
     @Resource
     private PsTestRecordService psTestRecordService;
+    @Resource
+    private PsChartService psChartService;
     public static final Logger logger = LogManager.getLogger(HomeController.class);
 
 
@@ -299,6 +301,8 @@ public class HomeController {
             result.setMessage("参数传入Controller层异常");
         }
         try{
+            PsChart psChart=new PsChart();
+            psChart.setPsId(psId);
             PsDrive psDrive=new PsDrive();
             psDrive.setPsId(psId);
             psDrive.setPhoneId(phoneId);
@@ -328,7 +332,18 @@ public class HomeController {
                            }
 
                        }
+                       if(psParameterList.get(i).getParaName().equals("驱动转速")){
+                           psChart.setDriveChart(drLoad);
+                       }
+                       if(psParameterList.get(i).getParaName().equals("变速箱温度")){
+                           psChart.setTmpChart(psParameterList.get(i).getParaValue());
+                       }
                    }
+                }
+                if(!psChartService.insertPsChart(psChart)){
+                    result.setSuccess(false);
+                    result.setCode(3);
+                    result.setMessage("进行驱动电机给定Controller层出错");
                 }
                 result.setSuccess(true);
                 result.setCode(1);
@@ -467,18 +482,30 @@ public class HomeController {
             psTemp.setTeName("变速箱目标温度");
             psTemp.setTeValue(paraValue);
             if(psTempService.insertPsTemp(psTemp)){
+                PsChart psChart=new PsChart();
+                psChart.setPsId(psId);
                 List<PsParameter> psParameterList=psParameterMapper.getPsParameterByPsId(psId);
                 for(int i=0;i<psParameterList.size();i++){
                     if(psParameterList.get(i).getParaName().equals("变速箱温度")){
                         psParameterList.get(i).setParaValue(paraValue);
                         Integer res=psParameterMapper.updatePsParameterByParaId( psParameterList.get(i));
+                        psChart.setTmpChart(paraValue);
                         if(res!=1){
                             result.setSuccess(false);
                             result.setCode(3);
                             result.setMessage("设置变速箱温度时Controller层出错");
                         }
                     }
+                    if(psParameterList.get(i).getParaName().equals("驱动转速")){
+                        psChart.setDriveChart(psParameterList.get(i).getParaValue());
+                    }
+                    if(!psChartService.insertPsChart(psChart)) {
+                        result.setSuccess(false);
+                        result.setCode(3);
+                        result.setMessage("设置变速箱温度时Controller层出错");
+                    }
                 }
+
                 result.setSuccess(true);
                 result.setCode(1);
                 result.setMessage("手动控制温度控制变速箱温度设置成功");
@@ -1015,6 +1042,36 @@ public class HomeController {
             result.setSuccess(false);
             result.setCode(3);
             result.setMessage("获取所有系统日志时Controller层出错");
+        }
+        return result;
+
+    }
+
+
+    @RequestMapping("/more/getChart")
+    @ResponseBody
+    public Result getChart(Integer psId){
+        Result result=new Result();
+        try{
+            Map<String, Object> map = new HashMap<String, Object>();
+            List<PsChart> psChartList=psChartService.getPsChartByPsId(psId);
+            if(psChartList==null){
+                result.setSuccess(false);
+                result.setCode(3);
+                result.setMessage("获取图标数据时Controller层出错");
+            }
+            else{
+                result.setSuccess(true);
+                result.setCode(1);
+                result.setMessage("获取图标数据成功");
+                map.put("psChartList",psChartList);
+                result.setData(map);
+            }
+        }catch (Throwable e){
+            logger.error("获取图标数据时Controller层出错");
+            result.setSuccess(false);
+            result.setCode(3);
+            result.setMessage("获取图标数据时Controller层出错");
         }
         return result;
 
