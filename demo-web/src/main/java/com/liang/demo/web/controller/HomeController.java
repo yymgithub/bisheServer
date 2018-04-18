@@ -499,11 +499,12 @@ public class HomeController {
                     if(psParameterList.get(i).getParaName().equals("驱动转速")){
                         psChart.setDriveChart(psParameterList.get(i).getParaValue());
                     }
-                    if(!psChartService.insertPsChart(psChart)) {
-                        result.setSuccess(false);
-                        result.setCode(3);
-                        result.setMessage("设置变速箱温度时Controller层出错");
-                    }
+
+                }
+                if(!psChartService.insertPsChart(psChart)) {
+                    result.setSuccess(false);
+                    result.setCode(3);
+                    result.setMessage("设置变速箱温度时Controller层出错");
                 }
 
                 result.setSuccess(true);
